@@ -1,10 +1,10 @@
-public class ChessPiece {
+public class Tile {
 
     private final int x;
     private final int y;
     public static final int size = 3;
 
-    public ChessPiece(int x, int y) {
+    public Tile(int x, int y) {
         this.x = x;
         this.y = y;
     }
