@@ -1,4 +1,5 @@
 public class Board {
+
     public String toString() {
         String brdStr = "";
         brdStr += "  a b c d e f g h\n";
