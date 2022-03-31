@@ -1,5 +1,4 @@
 public class Board {
-
     public static final int scale = 8;
     private final Tile[][] tiles = new Tile[scale][scale];
 
@@ -13,7 +12,7 @@ public class Board {
 
     public String toString() {
         String s = "";
-        s += "    a   b   c   d   e   f   g   h\n";
+        s += this.addLetters();
         for (int r = 0; r < scale; r++) {
             for (int l = 0; l < Tile.height; l++) {
                 for (int c = 0; c < scale; c++) {
@@ -21,7 +20,20 @@ public class Board {
                 }
             }
         }
-        s += "    a   b   c   d   e   f   g   h\n";
+        s += this.addLetters();
+        return s;
+    }
+
+    private String addLetters() {
+        String s = "  ";
+        for (int tileX = 0; tileX < scale; tileX++) {
+            for (int x = 0; x < Tile.width; x++) {
+                if (tileX != 0 && x == 0) continue;
+                if (x == Tile.width / 2) s += (char)(97 + tileX);
+                else s += " ";
+            }
+        }
+        s += "\n";
         return s;
     }
 }
