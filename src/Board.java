@@ -13,7 +13,7 @@ public class Board {
 
     public String toString() {
         String s = "";
-        s += "  a b c d e f g h\n";
+        s += "    a   b   c   d   e   f   g   h\n";
         for (int r = 0; r < scale; r++) {
             for (int l = 0; l < Tile.height; l++) {
                 for (int c = 0; c < scale; c++) {
@@ -21,7 +21,7 @@ public class Board {
                 }
             }
         }
-        s += "  a b c d e f g h\n";
+        s += "    a   b   c   d   e   f   g   h\n";
         return s;
     }
 }
