@@ -4,6 +4,7 @@ public class Tile {
     private final int y;
     public static final int width = 5;
     public static final int height = 3;
+    public static final String startPos = "";
 
     public Tile(int x, int y) {
         this.x = x;
@@ -52,6 +53,7 @@ public class Tile {
             }
             else {
                 if (i == 0 || i == width - 1) s += '\u2502';
+                else if (this.x == 0 && this.y == 1) s += '\u265C';
                 else s += " ";
             }
         }
