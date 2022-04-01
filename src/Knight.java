@@ -1,11 +1,11 @@
 public class Knight extends ChessPiece {
-    public Knight(int x, int y, boolean white) {
-        super(x, y, white);
+    public Knight(boolean white) {
+        super(white);
     }
 
     @Override
-    public String getName() {
-        return white ? "n" : "N";
+    public char getName() {
+        return white ? 'n' : 'N';
     }
 
     @Override

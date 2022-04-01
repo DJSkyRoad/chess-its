@@ -1,11 +1,11 @@
 public class Queen extends ChessPiece {
-    public Queen(int x, int y, boolean white) {
-        super(x, y, white);
+    public Queen(boolean white) {
+        super(white);
     }
 
     @Override
-    public String getName() {
-        return white ? "q" : "Q";
+    public char getName() {
+        return white ? 'q' : 'Q';
     }
 
     @Override

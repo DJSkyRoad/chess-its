@@ -1,11 +1,11 @@
 public class Pawn extends ChessPiece {
-    public Pawn(int x, int y, boolean white) {
-        super(x, y, white);
+    public Pawn(boolean white) {
+        super(white);
     }
 
     @Override
-    public String getName() {
-        return white ? "p" : "P";
+    public char getName() {
+        return white ? 'p' : 'P';
     }
 
     @Override

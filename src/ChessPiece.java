@@ -1,14 +1,14 @@
 public abstract class ChessPiece {
-    public int x;
-    public int y;
     public final boolean white;
 
-    public ChessPiece(int x, int y, boolean white) {
-        this.x = x;
-        this.y = y;
+    public ChessPiece(boolean white) {
         this.white = white;
     }
 
+    public boolean canMoveTo(int xOld, int yOld, int xDest, int yDest) {
+        return true;
+    }
+
     public abstract String toString();
-    public abstract String getName();
+    public abstract char getName();
 }

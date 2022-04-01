@@ -1,11 +1,11 @@
 public class Rook extends ChessPiece {
-    public Rook(int x, int y, boolean white) {
-        super(x, y, white);
+    public Rook(boolean white) {
+        super(white);
     }
 
     @Override
-    public String getName() {
-        return white ? "r" : "R";
+    public char getName() {
+        return white ? 'r' : 'R';
     }
 
     @Override

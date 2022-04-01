@@ -1,11 +1,11 @@
 public class Bishop extends ChessPiece {
-    public Bishop(int x, int y, boolean white) {
-        super(x, y, white);
+    public Bishop(boolean white) {
+        super(white);
     }
 
     @Override
-    public String getName() {
-        return white ? "b" : "B";
+    public char getName() {
+        return white ? 'b' : 'B';
     }
 
     @Override
