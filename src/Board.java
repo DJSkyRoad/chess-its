@@ -1,7 +1,7 @@
 public class Board {
     public static final int scale = 8;
-    public static final int tileWidth = 7;
-    public static final int tileHeight = 3;
+    public static final int tileWidth = 3;
+    public static final int tileHeight = 1;
     public ChessPiece[][] pos = {
             {new Rook(false), new Knight(false), new Bishop(false), new Queen(false), new King(false), new Bishop(false), new Knight(false), new Rook(false)},
             {new Pawn(false), new Pawn(false), new Pawn(false), new Pawn(false), new Pawn(false), new Pawn(false), new Pawn(false), new Pawn(false)},
@@ -46,44 +46,16 @@ public class Board {
     private String getTileString(int x, int y, int line) {
         if (line >= tileHeight || line < 0) return "INVALID LINE INDEX";
         String s = "";
-        if (line == 0 && y > 0) return s;
         if (x == 0) {
             if (line == tileHeight / 2) s += (Board.scale - y) + " ";
             else s += "  ";
         }
+        if ((x % 2 == 0 && y % 2 == 0) || (x % 2 != 0 && y % 2 != 0)) s += "\u001B[47m";
         for (int column = 0; column < tileWidth; column++) {
-            if (column == 0 && x > 0) continue;
-            if (line == 0) {
-                if (column == 0) {
-                    if (x == 0 && y == 0) s += '\u250C';
-                    else if (x == 0) s += '\u251C';
-                    else if (y == 0) s += '\u252C';
-                    else s += '\u253C';
-                } else if (column == tileWidth - 1) {
-                    if (x == Board.scale - 1 && y == 0) s += '\u2510';
-                    else if (x == Board.scale - 1) s += '\u2524';
-                    else if (y == 0) s += '\u252C';
-                    else s += '\u253C';
-                } else s += '\u2500';
-            } else if (line == tileHeight - 1) {
-                if (column == 0) {
-                    if (x == 0 && y == Board.scale - 1) s += '\u2514';
-                    else if (x == 0) s += '\u251C';
-                    else if (y == Board.scale - 1) s += '\u2534';
-                    else s += '\u253C';
-                } else if (column == tileWidth - 1) {
-                    if (x == Board.scale - 1 && y == Board.scale - 1) s += '\u2518';
-                    else if (x == Board.scale - 1) s += '\u2524';
-                    else if (y == Board.scale - 1) s += '\u2534';
-                    else s += '\u253C';
-                } else s += '\u2500';
-            } else {
-                if (column == 0 || column == tileWidth - 1) s += '\u2502';
-                else if (column == tileWidth / 2 && pos[y][x] != null) {
-                    s += pos[y][x];
-                } else s += " ";
-            }
+            if (line == tileHeight / 2 && column == tileWidth / 2 && pos[y][x] != null) s += pos[y][x];
+            else s += "\u2003";
         }
+        s += "\u001B[0m";
         if (x == Board.scale - 1) {
             if (line == tileHeight / 2) s += " " + (Board.scale - y);
             s += '\n';
