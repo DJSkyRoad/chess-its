@@ -4,6 +4,11 @@ public class Bishop extends ChessPiece {
     }
 
     @Override
+    public boolean canMoveTo(int xPiece, int yPiece, int xDest, int yDest, boolean foeOnDest) {
+        return Math.abs(xDest - xPiece) == Math.abs(yDest - yPiece);
+    }
+
+    @Override
     public char getName() {
         return white ? 'b' : 'B';
     }

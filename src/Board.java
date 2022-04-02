@@ -14,19 +14,29 @@ public class Board {
     };
 
     public boolean canMovePieceTo(char name, boolean whiteTurn, int xPiece, int yPiece, int xDest, int yDest) {
-        ChessPiece piece = pos[xPiece][yPiece];
-        ChessPiece destPiece = pos[xDest][yDest];
+        if (xPiece < 0 || yPiece < 0 || xDest < 0 || yDest < 0
+        || xPiece > Board.scale || yPiece > Board.scale || xDest > Board.scale || yDest > Board.scale) return false;
+        ChessPiece piece = pos[yPiece][xPiece];
+        ChessPiece destPiece = pos[yDest][xDest];
         if (piece == null
                 || piece.getName() != name
                 || piece.white != whiteTurn
                 || (destPiece != null && destPiece.white == whiteTurn)) return false;
-        return piece.canMoveTo(xPiece, yPiece, xDest, yDest);
+        if (!(piece instanceof Knight)) {
+            int x = xPiece, y = yPiece;
+            while (Math.abs(xDest - x) > 1 || Math.abs(yDest - y) > 1) {
+                if (pos[y][x] != null) return false;
+                x = xDest - x > 0 ? x + 1 : x - 1;
+                y = yDest - y > 0 ? y + 1 : y - 1;
+            }
+        }
+        return piece.canMoveTo(xPiece, yPiece, xDest, yDest, destPiece != null);
     }
 
     public void movePieceTo(int xPiece, int yPiece, int xDest, int yDest) {
-        ChessPiece piece = pos[xPiece][yPiece];
-        pos[xPiece][yPiece] = null;
-        pos[xDest][yDest] = piece;
+        ChessPiece piece = pos[yPiece][xPiece];
+        pos[yPiece][xPiece] = null;
+        pos[yDest][xDest] = piece;
     }
 
     public String toString() {

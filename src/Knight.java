@@ -4,6 +4,13 @@ public class Knight extends ChessPiece {
     }
 
     @Override
+    public boolean canMoveTo(int xPiece, int yPiece, int xDest, int yDest, boolean foeOnDest) {
+        int xDist = Math.abs(xDest - xPiece);
+        int yDist = Math.abs(yDest - yPiece);
+        return (xDist == 2 && yDist == 1) || (xDist == 1 && yDist == 2);
+    }
+
+    @Override
     public char getName() {
         return white ? 'n' : 'N';
     }

@@ -4,6 +4,13 @@ public class King extends ChessPiece {
     }
 
     @Override
+    public boolean canMoveTo(int xPiece, int yPiece, int xDest, int yDest, boolean foeOnDest) {
+        int xDist = Math.abs(xDest - xPiece);
+        int yDist = Math.abs(yDest - yPiece);
+        return !(xDist > 1 || yDist > 1);
+    }
+
+    @Override
     public char getName() {
         return white ? 'k' : 'K';
     }

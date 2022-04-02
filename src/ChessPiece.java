@@ -5,10 +5,7 @@ public abstract class ChessPiece {
         this.white = white;
     }
 
-    public boolean canMoveTo(int xOld, int yOld, int xDest, int yDest) {
-        return true;
-    }
-
+    public abstract boolean canMoveTo(int xPiece, int yPiece, int xDest, int yDest, boolean foeOnDest);
     public abstract String toString();
     public abstract char getName();
 }
