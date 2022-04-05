@@ -16,11 +16,20 @@ public class Main {
             int yPiece = Board.scale - Character.getNumericValue(inp.charAt(2));
             int xDest = (int)inp.charAt(4) - 97;
             int yDest = Board.scale - Character.getNumericValue(inp.charAt(5));
-            if (brd.canMovePieceTo(name, whiteTurn, xPiece, yPiece, xDest, yDest)) {
-                brd.movePieceTo(xPiece, yPiece, xDest, yDest);
-                whiteTurn = !whiteTurn;
+            if (brd.check(name, whiteTurn, xPiece, yPiece, xDest, yDest)) {
+                if (brd.canEscapeCheckTo(name, whiteTurn, xPiece, yPiece, xDest, yDest)) {    //check
+                    brd.movePieceTo(xPiece, yPiece, xDest, yDest);
+                    whiteTurn = !whiteTurn;
+                } else {
+                    System.out.println("Invalid command! Please try again.");
+                }
             } else {
-                System.out.println("Invalid command! Please try again.");
+                if (brd.canMovePieceTo(name, whiteTurn, xPiece, yPiece, xDest, yDest)) {
+                    brd.movePieceTo(xPiece, yPiece, xDest, yDest);
+                    whiteTurn = !whiteTurn;
+                } else {
+                    System.out.println("Invalid command! Please try again.");
+                }
             }
         }
     }

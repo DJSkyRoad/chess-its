@@ -32,6 +32,20 @@ public class Board {
         }
         return piece.canMoveTo(xPiece, yPiece, xDest, yDest, destPiece != null);
     }
+    public boolean check(char name, boolean whiteTurn, int xPiece, int yPiece, int xDest, int yDest) {
+        if (false) {    //condition for check
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public boolean canEscapeCheckTo(char name, boolean whiteTurn, int xPiece, int yPiece, int xDest, int yDest) {     //Check if Dest valid
+        if (false) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public void movePieceTo(int xPiece, int yPiece, int xDest, int yDest) {
         ChessPiece piece = pos[yPiece][xPiece];
