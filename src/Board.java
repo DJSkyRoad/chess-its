@@ -1,3 +1,5 @@
+import java.awt.*;
+
 public class Board {
     public static final int scale = 8;
     public static final int tileWidth = 3;
@@ -51,6 +53,22 @@ public class Board {
         ChessPiece piece = pos[yPiece][xPiece];
         pos[yPiece][xPiece] = null;
         pos[yDest][xDest] = piece;
+    }
+
+    public void draw(Graphics2D g2) {
+        g2.setColor(Color.WHITE);
+        for (int x = 0; x < scale; x++) {
+            for (int y = 0; y < scale; y++) {
+                if ((x % 2 == 0 && y % 2 == 0) || (x % 2 != 0 && y % 2 != 0)) g2.fillRect(x * GamePanel.tileSize + GamePanel.tileSize, y * GamePanel.tileSize + GamePanel.tileSize, GamePanel.tileSize, GamePanel.tileSize);
+            }
+        }
+
+        for (int x = 0; x < scale; x++) {
+            for (int y = 0; y < scale; y++) {
+                if (this.pos[y][x] == null) continue;
+                g2.drawImage(this.pos[y][x].image, x * GamePanel.tileSize + GamePanel.tileSize, y * GamePanel.tileSize + GamePanel.tileSize, GamePanel.tileSize / 2, GamePanel.tileSize / 2, null);
+            }
+        }
     }
 
     public String toString() {

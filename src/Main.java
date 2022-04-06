@@ -1,8 +1,33 @@
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.util.Scanner;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+    	JFrame window = new JFrame();
+    	window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setTitle("Chess");
+		window.setResizable(false);
+
+    	GamePanel panel = new GamePanel();
+		window.add(panel);
+		window.pack();
+
+		window.setLocationRelativeTo(null);
+		window.setVisible(true);
+    	
+    	panel.startGameThread();
+
+        /*Scanner scanner = new Scanner(System.in);
 
         Board brd = new Board();
         boolean whiteTurn = true;
@@ -31,6 +56,6 @@ public class Main {
                     System.out.println("Invalid command! Please try again.");
                 }
             }
-        }
+        }*/
     }
 }

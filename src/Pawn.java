@@ -1,6 +1,15 @@
+import javax.imageio.ImageIO;
+import java.io.IOException;
+
 public class Pawn extends ChessPiece {
     public Pawn(boolean white) {
         super(white);
+        try {
+            this.image = ImageIO.read(getClass()
+                    .getResourceAsStream(white ? "/resources/white_pawn.png" : "/resources/black_pawn.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

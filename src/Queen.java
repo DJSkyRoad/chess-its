@@ -1,6 +1,15 @@
+import javax.imageio.ImageIO;
+import java.io.IOException;
+
 public class Queen extends ChessPiece {
     public Queen(boolean white) {
         super(white);
+        try {
+            this.image = ImageIO.read(getClass()
+                    .getResourceAsStream(white ? "/resources/white_queen.png" : "/resources/black_queen.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

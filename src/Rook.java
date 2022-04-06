@@ -1,6 +1,15 @@
+import javax.imageio.ImageIO;
+import java.io.IOException;
+
 public class Rook extends ChessPiece {
     public Rook(boolean white) {
         super(white);
+        try {
+            this.image = ImageIO.read(getClass()
+                    .getResourceAsStream(white ? "/resources/white_rook.png" : "/resources/black_rook.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
