@@ -4,11 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GamePanel extends JPanel implements Runnable {
-    public static final int tileSize = 16 * 3;
+    public static final int tileSize = 20 * 3;
     public static final int borderSize = 10;
     public static final int panelSize = tileSize * borderSize;
     private final int fps = 60;
     private final MouseInput mouseInput = new MouseInput();
+    public static double deltaTime;
 
     private final Board board = new Board();
 
@@ -64,7 +65,7 @@ public class GamePanel extends JPanel implements Runnable {
     @Override
     public void run() {
         double updateIntervall = 1000000000/this.fps;
-        double deltaTime = 0;
+        deltaTime = 0;
         long lastTime = System.nanoTime();
         long currentTime;
 
