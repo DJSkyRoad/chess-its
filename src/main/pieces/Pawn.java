@@ -1,3 +1,7 @@
+package main.pieces;
+
+import main.Board;
+
 import javax.imageio.ImageIO;
 import java.io.IOException;
 

@@ -1,8 +1,9 @@
-import java.awt.*;
+package main.pieces;
+
 import java.awt.image.BufferedImage;
 
 public abstract class ChessPiece {
-    protected BufferedImage image;
+    public BufferedImage image;
 	public final boolean white;
 
     public ChessPiece(boolean white) {

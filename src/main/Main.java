@@ -1,15 +1,6 @@
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.util.Scanner;
+package main;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 public class Main {
     public static void main(String[] args) {
@@ -29,7 +20,7 @@ public class Main {
 
         /*Scanner scanner = new Scanner(System.in);
 
-        Board brd = new Board();
+        main.Board brd = new main.Board();
         boolean whiteTurn = true;
 
         while (true) {
@@ -38,9 +29,9 @@ public class Main {
             String inp = scanner.nextLine(); // e.g. pb2-b3
             char name = inp.charAt(0);
             int xPiece = (int)inp.charAt(1) - 97;
-            int yPiece = Board.scale - Character.getNumericValue(inp.charAt(2));
+            int yPiece = main.Board.scale - Character.getNumericValue(inp.charAt(2));
             int xDest = (int)inp.charAt(4) - 97;
-            int yDest = Board.scale - Character.getNumericValue(inp.charAt(5));
+            int yDest = main.Board.scale - Character.getNumericValue(inp.charAt(5));
             if (brd.check(name, whiteTurn, xPiece, yPiece, xDest, yDest)) {
                 if (brd.canEscapeCheckTo(name, whiteTurn, xPiece, yPiece, xDest, yDest)) {    //check
                     brd.movePieceTo(xPiece, yPiece, xDest, yDest);

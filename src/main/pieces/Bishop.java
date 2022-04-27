@@ -1,12 +1,14 @@
+package main.pieces;
+
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
-public class Queen extends ChessPiece {
-    public Queen(boolean white) {
+public class Bishop extends ChessPiece {
+    public Bishop(boolean white) {
         super(white);
         try {
             this.image = ImageIO.read(getClass()
-                    .getResourceAsStream(white ? "/resources/white_queen.png" : "/resources/black_queen.png"));
+                    .getResourceAsStream(white ? "/resources/white_bishop.png" : "/resources/black_bishop.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -14,19 +16,16 @@ public class Queen extends ChessPiece {
 
     @Override
     public boolean canMoveTo(int xPiece, int yPiece, int xDest, int yDest, boolean foeOnDest) {
-        int xDist = Math.abs(xDest - xPiece);
-        int yDist = Math.abs(yDest - yPiece);
-        return !(xDist > 0 && yDist > 0)
-                || xDist == yDist;
+        return Math.abs(xDest - xPiece) == Math.abs(yDest - yPiece);
     }
 
     @Override
     public char getName() {
-        return white ? 'q' : 'Q';
+        return white ? 'b' : 'B';
     }
 
     @Override
     public String toString() {
-        return white ? "\u265B" : "\u2655";
+        return white ? "\u265D" : "\u2657";
     }
 }
