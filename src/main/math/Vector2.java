@@ -11,6 +11,11 @@ public class Vector2 {
         this.y = y;
     }
 
+    public void set(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
     public boolean compare(int x, int y) {
         return this.x == x && this.y == y;
     }

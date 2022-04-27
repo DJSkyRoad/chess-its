@@ -1,5 +1,7 @@
 package main;
 
+import main.math.Vector2;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -9,6 +11,7 @@ public class GamePanel extends JPanel implements Runnable {
     public static final int panelSize = tileSize * borderSize;
     private final int fps = 60;
     private final MouseInput mouseInput = new MouseInput();
+    private boolean whiteTurn = true;
 
     private final Board board = new Board();
 
@@ -42,17 +45,20 @@ public class GamePanel extends JPanel implements Runnable {
             int x = pos.x / tileSize - 1;
             int y = pos.y / tileSize - 1;
 
-            this.board.hovered.x = x;
-            this.board.hovered.y = y;
+            this.board.hovered.set(x, y);
 
             if (this.mouseInput.mouseClicked) {
                 this.mouseInput.mouseClicked = false;
-                this.board.selected.x = x;
-                this.board.selected.y = y;
+
+                if (this.board.selected.compare(x, y)) this.board.selected.set(-1, -1);
+                else if (!this.board.selected.compare(-1, -1) && this.board.canMovePieceTo(this.whiteTurn, this.board.selected.x,
+                        this.board.selected.y, x, y)) {
+                    this.board.movePieceTo(this.board.selected.x, this.board.selected.y, x, y);
+                    this.whiteTurn = !this.whiteTurn;
+                }
+                else this.board.selected.set(x, y);
             }
         }
-
-        System.out.println(this.board.selected.compare(this.board.hovered));
 
         this.repaint();
     }

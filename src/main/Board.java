@@ -10,8 +10,8 @@ public class Board {
     public static final int tileWidth = 3;
     public static final int tileHeight = 1;
 
-    public final Vector2 hovered = new Vector2(0, 0);
-    public final Vector2 selected = new Vector2(0, 0);
+    public final Vector2 hovered = new Vector2(-1, -1);
+    public final Vector2 selected = new Vector2(-1, -1);
 
     public ChessPiece[][] pos = {
             {new Rook(false), new Knight(false), new Bishop(false), new Queen(false), new King(false), new Bishop(false), new Knight(false), new Rook(false)},
@@ -24,13 +24,12 @@ public class Board {
             {new Rook(true), new Knight(true), new Bishop(true), new Queen(true), new King(true), new Bishop(true), new Knight(true), new Rook(true)}
     };
 
-    public boolean canMovePieceTo(char name, boolean whiteTurn, int xPiece, int yPiece, int xDest, int yDest) {
+    public boolean canMovePieceTo(boolean whiteTurn, int xPiece, int yPiece, int xDest, int yDest) {
         if (xPiece < 0 || yPiece < 0 || xDest < 0 || yDest < 0
         || xPiece > Board.scale || yPiece > Board.scale || xDest > Board.scale || yDest > Board.scale) return false;
         ChessPiece piece = pos[yPiece][xPiece];
         ChessPiece destPiece = pos[yDest][xDest];
         if (piece == null
-                || piece.getName() != name
                 || piece.white != whiteTurn
                 || (destPiece != null && destPiece.white == whiteTurn)) return false;
         if (!(piece instanceof Knight)) {
