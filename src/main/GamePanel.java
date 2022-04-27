@@ -9,7 +9,6 @@ public class GamePanel extends JPanel implements Runnable {
     public static final int panelSize = tileSize * borderSize;
     private final int fps = 60;
     private final MouseInput mouseInput = new MouseInput();
-    private boolean whiteTurn = true;
 
     private final Board board = new Board();
 
@@ -49,12 +48,13 @@ public class GamePanel extends JPanel implements Runnable {
                 this.mouseInput.mouseClicked = false;
 
                 if (this.board.selected.compare(x, y)) this.board.selected.set(-1, -1);
-                else if (!this.board.selected.compare(-1, -1) && this.board.canMovePieceTo(this.whiteTurn, this.board.selected.x,
+                else if (!this.board.selected.compare(-1, -1) && this.board.canMovePieceTo(this.board.whiteTurn, this.board.selected.x,
                         this.board.selected.y, x, y)) {
                     this.board.movePieceTo(this.board.selected.x, this.board.selected.y, x, y);
-                    this.whiteTurn = !this.whiteTurn;
+                    this.board.selected.set(-1, -1);
+                    this.board.whiteTurn = !this.board.whiteTurn;
                 }
-                else this.board.selected.set(x, y);
+                else if (this.board.canSelect(x, y)) this.board.selected.set(x, y);
             }
         }
 

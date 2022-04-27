@@ -20,7 +20,7 @@ public class Pawn extends ChessPiece {
     public boolean canMoveTo(int xPiece, int yPiece, int xDest, int yDest, boolean foeOnDest) {
         int yDist = yDest - yPiece;
         int xDist = xDest - xPiece;
-        return ((this.white && (yDist == -1 || (yDist == -2 && yPiece == Board.scale - 1)))
+        return ((this.white && (yDist == -1 || (yDist == -2 && yPiece == Board.scale - 2)))
                 || (!this.white && (yDist == 1 || (yDist == 2 && yPiece == 1))))
                 && (xDist == 0 || (Math.abs(xDist) == 1 && foeOnDest));
     }
