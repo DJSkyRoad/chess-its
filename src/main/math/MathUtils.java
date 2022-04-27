@@ -2,7 +2,7 @@ package main.math;
 
 public class MathUtils {
     public static int getSign(int value) {
-        return value > 0 ? 1 : -1;
+        return value == 0 ? 0 : value > 0 ? 1 : -1;
     }
 
     public static boolean inRange(int value, int min, int max) {

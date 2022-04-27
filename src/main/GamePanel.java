@@ -1,5 +1,7 @@
 package main;
 
+import main.math.ChessPos;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -40,22 +42,21 @@ public class GamePanel extends JPanel implements Runnable {
     public void update() {
         Point pos = this.getMousePosition();
         if (pos != null) {
-            int x = pos.x / tileSize - 1;
-            int y = pos.y / tileSize - 1;
+            ChessPos chessPos = new ChessPos(pos.x / tileSize - 1, pos.y / tileSize - 1);
 
-            this.board.hovered.set(x, y);
+            if (this.board.canSelect(chessPos)) this.board.hovered = chessPos;
+            else this.board.hovered = new ChessPos(-1, -1);
 
             if (this.mouseInput.mouseClicked) {
                 this.mouseInput.mouseClicked = false;
 
-                if (this.board.selected.compare(x, y)) this.board.selected.set(-1, -1);
-                else if (!this.board.selected.compare(-1, -1) && this.board.canMovePieceTo(this.board.whiteTurn, this.board.selected.x,
-                        this.board.selected.y, x, y)) {
-                    this.board.movePieceTo(this.board.selected.x, this.board.selected.y, x, y);
-                    this.board.selected.set(-1, -1);
+                if (this.board.selected.compare(chessPos)) this.board.selected = new ChessPos(-1, -1);
+                else if (this.board.canMoveSelectedTo(chessPos)) {
+                    this.board.moveSelectedTo(chessPos);
+                    this.board.selected = new ChessPos(-1, -1);
                     this.board.whiteTurn = !this.board.whiteTurn;
                 }
-                else if (this.board.canSelect(x, y)) this.board.selected.set(x, y);
+                else if (this.board.canSelect(chessPos)) this.board.selected = chessPos;
             }
         }
 

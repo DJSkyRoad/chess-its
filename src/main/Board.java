@@ -21,8 +21,8 @@ public class Board {
 
     public boolean whiteTurn = true;
 
-    public final ChessPos hovered = new ChessPos(-1, -1);
-    public final ChessPos selected = new ChessPos(-1, -1);
+    public ChessPos hovered = new ChessPos(-1, -1);
+    public ChessPos selected = new ChessPos(-1, -1);
 
     public ChessPiece[][] pos = {
             {new Rook(false), new Knight(false), new Bishop(false), new Queen(false), new King(false), new Bishop(false), new Knight(false), new Rook(false)},
@@ -44,27 +44,25 @@ public class Board {
         }
     }
 
-    public boolean canSelect(int x, int y) {
-        return this.pos[y][x] != null && this.pos[y][x].white == this.whiteTurn;
+    public boolean canSelect(ChessPos chessPos) {
+        return chessPos.isValid() && ((this.pos[chessPos.y][chessPos.x] != null && this.pos[chessPos.y][chessPos.x].white == this.whiteTurn) || (this.selected.isValid() && this.canMoveSelectedTo(chessPos)));
     }
 
-    public boolean canMovePieceTo(boolean whiteTurn, int xPiece, int yPiece, int xDest, int yDest) {
-        if (xPiece < 0 || yPiece < 0 || xDest < 0 || yDest < 0
-        || xPiece > Board.scale || yPiece > Board.scale || xDest > Board.scale || yDest > Board.scale) return false;
-        ChessPiece piece = pos[yPiece][xPiece];
-        ChessPiece destPiece = pos[yDest][xDest];
+    public boolean canMoveSelectedTo(ChessPos dest) {
+        if (!this.selected.isValid() || !dest.isValid()) return false;
+        ChessPiece piece = pos[this.selected.y][this.selected.x];
+        ChessPiece destPiece = pos[dest.y][dest.x];
         if (piece == null
-                || piece.white != whiteTurn
-                || (destPiece != null && destPiece.white == whiteTurn)) return false;
+                || piece.white != this.whiteTurn
+                || (destPiece != null && destPiece.white == this.whiteTurn)) return false;
         if (!(piece instanceof Knight)) {
-            int x = xPiece + MathUtils.getSign(xDest - xPiece), y = yPiece + MathUtils.getSign(yDest - yPiece);
-            while (Math.abs(xDest - x) > 1 || Math.abs(yDest - y) > 1) {
-                if (pos[y][x] != null) return false;
-                x += MathUtils.getSign(xDest - xPiece);
-                y += MathUtils.getSign(yDest - yPiece);
+            ChessPos testPos = this.selected.next(dest);
+            while (Math.abs(dest.x - testPos.x) > 0 || Math.abs(dest.y - testPos.y) > 0) {
+                if (testPos.isValid() && pos[testPos.y][testPos.x] != null) return false;
+                testPos = testPos.next(dest);
             }
         }
-        return piece.canMoveTo(xPiece, yPiece, xDest, yDest, destPiece != null);
+        return piece.canMoveTo(this.selected.x, this.selected.y, dest.x, dest.y, destPiece != null);
     }
     public boolean check(char name, boolean whiteTurn, int xPiece, int yPiece, int xDest, int yDest) {
         if (false) {    //condition for check
@@ -81,10 +79,10 @@ public class Board {
         }
     }
 
-    public void movePieceTo(int xPiece, int yPiece, int xDest, int yDest) {
-        ChessPiece piece = pos[yPiece][xPiece];
-        pos[yPiece][xPiece] = null;
-        pos[yDest][xDest] = piece;
+    public void moveSelectedTo(ChessPos dest) {
+        ChessPiece piece = pos[this.selected.y][this.selected.x];
+        pos[this.selected.y][this.selected.x] = null;
+        pos[dest.y][dest.x] = piece;
     }
 
     public void draw(Graphics2D g2) {
