@@ -1,5 +1,6 @@
 package main;
 
+import main.math.Vector2;
 import main.pieces.*;
 
 import java.awt.*;
@@ -8,6 +9,10 @@ public class Board {
     public static final int scale = 8;
     public static final int tileWidth = 3;
     public static final int tileHeight = 1;
+
+    public final Vector2 hovered = new Vector2(0, 0);
+    public final Vector2 selected = new Vector2(0, 0);
+
     public ChessPiece[][] pos = {
             {new Rook(false), new Knight(false), new Bishop(false), new Queen(false), new King(false), new Bishop(false), new Knight(false), new Rook(false)},
             {new Pawn(false), new Pawn(false), new Pawn(false), new Pawn(false), new Pawn(false), new Pawn(false), new Pawn(false), new Pawn(false)},
@@ -63,7 +68,11 @@ public class Board {
         g2.setColor(Color.WHITE);
         for (int x = 0; x < scale; x++) {
             for (int y = 0; y < scale; y++) {
-                if ((x % 2 == 0 && y % 2 == 0) || (x % 2 != 0 && y % 2 != 0)) g2.fillRect(x * GamePanel.tileSize + GamePanel.tileSize, y * GamePanel.tileSize + GamePanel.tileSize, GamePanel.tileSize, GamePanel.tileSize);
+                if (this.hovered.compare(x, y) || this.selected.compare(x, y)) g2.setColor(Color.YELLOW);
+                else if (g2.getColor() != Color.WHITE) g2.setColor(Color.WHITE);
+                if ((x % 2 == 0 && y % 2 == 0) || (x % 2 != 0 && y % 2 != 0)
+                || this.hovered.compare(x, y)
+                || this.selected.compare(x, y)) g2.fillRect(x * GamePanel.tileSize + GamePanel.tileSize, y * GamePanel.tileSize + GamePanel.tileSize, GamePanel.tileSize, GamePanel.tileSize);
             }
         }
 

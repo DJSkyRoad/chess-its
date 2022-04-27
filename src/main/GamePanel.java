@@ -8,6 +8,7 @@ public class GamePanel extends JPanel implements Runnable {
     public static final int borderSize = 10;
     public static final int panelSize = tileSize * borderSize;
     private final int fps = 60;
+    private final MouseInput mouseInput = new MouseInput();
 
     private final Board board = new Board();
 
@@ -17,6 +18,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.setPreferredSize(new Dimension(panelSize, panelSize));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
+        this.addMouseListener(this.mouseInput);
     }
 
     public void startGameThread() {
@@ -34,6 +36,27 @@ public class GamePanel extends JPanel implements Runnable {
         this.board.draw(g2);
     }
 
+    public void update() {
+        Point pos = this.getMousePosition();
+        if (pos != null) {
+            int x = pos.x / tileSize - 1;
+            int y = pos.y / tileSize - 1;
+
+            this.board.hovered.x = x;
+            this.board.hovered.y = y;
+
+            if (this.mouseInput.mouseClicked) {
+                this.mouseInput.mouseClicked = false;
+                this.board.selected.x = x;
+                this.board.selected.y = y;
+            }
+        }
+
+        System.out.println(this.board.selected.compare(this.board.hovered));
+
+        this.repaint();
+    }
+
     @Override
     public void run() {
         double updateIntervall = 1000000000/this.fps;
@@ -48,6 +71,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             if (deltaTime >= 1) {
                 // Update functions go here
+                this.update();
                 deltaTime--;
             }
         }
