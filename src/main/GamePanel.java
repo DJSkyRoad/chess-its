@@ -1,7 +1,5 @@
 package main;
 
-import main.math.Vector2;
-
 import javax.swing.*;
 import java.awt.*;
 

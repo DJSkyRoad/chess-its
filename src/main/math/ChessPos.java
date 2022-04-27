@@ -1,12 +1,10 @@
 package main.math;
 
-public class Vector2 {
-    public static final Vector2 ZERO = new Vector2(0, 0);
-
+public class ChessPos {
     public int x;
     public int y;
 
-    public Vector2(int x, int y) {
+    public ChessPos(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -20,12 +18,12 @@ public class Vector2 {
         return this.x == x && this.y == y;
     }
 
-    public boolean compare(Vector2 vec) {
+    public boolean compare(ChessPos vec) {
         return this.x == vec.x && this.y == vec.y;
     }
 
     @Override
     public String toString() {
-        return "Vector2{x=" + x + ", y=" + y + '}';
+        return "ChessPos{x=" + x + ", y=" + y + '}';
     }
 }
