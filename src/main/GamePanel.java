@@ -12,6 +12,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final int fps = 60;
     private final MouseInput mouseInput = new MouseInput();
     public static double deltaTime;
+    private double intervalTime;
 
     private final Board board = new Board();
 
@@ -65,20 +66,23 @@ public class GamePanel extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        double updateIntervall = 1000000000/this.fps;
-        deltaTime = 0;
+        double updateInterval = 1000000000/this.fps;
         long lastTime = System.nanoTime();
         long currentTime;
 
         while (this.gameThread != null) {
             currentTime = System.nanoTime();
-            deltaTime += (currentTime - lastTime) / updateIntervall;
+            this.intervalTime += (currentTime - lastTime) / updateInterval;
+            this.deltaTime += (currentTime - lastTime) * 0.000000001D;
             lastTime = currentTime;
 
-            if (deltaTime >= 1) {
+
+
+            if (intervalTime >= 1) {
                 // Update functions go here
                 this.update();
-                deltaTime--;
+                intervalTime--;
+                deltaTime = 0;
             }
         }
     }
