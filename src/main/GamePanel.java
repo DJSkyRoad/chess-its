@@ -34,10 +34,22 @@ public class GamePanel extends JPanel implements Runnable {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+
         g2.setColor(Color.BLACK);
         g2.fillRect(0, 0, panelSize, panelSize);
 
         this.board.draw(g2);
+
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Helvetia", Font.BOLD, 30));
+        this.drawCenteredString(g2, this.board.whiteTurn ? "White's turn" : "Black's turn", this.getWidth() / 2, 60);
+    }
+
+    public void drawCenteredString(Graphics2D g2, String text, int x, int y) {
+        FontMetrics metrics = g2.getFontMetrics(g2.getFont());
+        x = x - metrics.stringWidth(text) / 2;
+        y = y - metrics.getHeight() / 2;
+        g2.drawString(text, x, y);
     }
 
     public void update() {
