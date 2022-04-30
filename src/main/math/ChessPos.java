@@ -1,6 +1,6 @@
 package main.math;
 
-import main.Board;
+import main.gui.Board;
 
 public class ChessPos {
     public int x;

@@ -1,5 +1,6 @@
-package main;
+package main.gui;
 
+import main.Game;
 import main.math.ChessPos;
 import main.math.MathUtils;
 import main.pieces.*;
@@ -11,9 +12,9 @@ import java.io.IOException;
 
 public class Board {
     public static final int scale = 8;
-    private static final int offset = 1 * GamePanel.tileSize;
-    private static final int pieceScale = (int)(0.6F * GamePanel.tileSize);
-    private static final int pieceOffset = offset + GamePanel.tileSize / 2;
+    private static final int offset = 1 * Game.tileSize;
+    private static final int pieceScale = (int)(0.6F * Game.tileSize);
+    private static final int pieceOffset = offset + Game.tileSize / 2;
 
     private BufferedImage selectImg;
     private float selectScale = 1.25F;
@@ -88,24 +89,23 @@ public class Board {
     public void draw(Graphics2D g2) {
         for (int x = 0; x < scale; x++) {
             for (int y = 0; y < scale; y++) {
-                //if (this.hovered.compare(x, y) || this.selected.compare(x, y)) g2.setColor(Color.YELLOW);
                 if ((x % 2 == 0 && y % 2 == 0) || (x % 2 != 0 && y % 2 != 0)) g2.setColor(new Color(0x1f1f1f));
                 else g2.setColor(new Color(0xededed));
-                g2.fillRect(x * GamePanel.tileSize + offset, y * GamePanel.tileSize + offset, GamePanel.tileSize, GamePanel.tileSize);
+                g2.fillRect(x * Game.tileSize + offset, y * Game.tileSize + offset, Game.tileSize, Game.tileSize);
             }
         }
 
         for (int x = 0; x < scale; x++) {
             for (int y = 0; y < scale; y++) {
                 if (this.pos[y][x] == null) continue;
-                this.drawCenteredImage(g2, this.pos[y][x].image, x * GamePanel.tileSize + pieceOffset, y * GamePanel.tileSize + pieceOffset, pieceScale);
+                this.drawCenteredImage(g2, this.pos[y][x].image, x * Game.tileSize + pieceOffset, y * Game.tileSize + pieceOffset, pieceScale);
             }
         }
 
         if (this.selected.isValid())
-            this.drawCenteredImage(g2, this.selectImg, this.selected.x * GamePanel.tileSize + pieceOffset, this.selected.y * GamePanel.tileSize + pieceOffset, GamePanel.tileSize);
+            this.drawCenteredImage(g2, this.selectImg, this.selected.x * Game.tileSize + pieceOffset, this.selected.y * Game.tileSize + pieceOffset, Game.tileSize);
         if (this.hovered.isValid() && !this.selected.compare(this.hovered)) {
-            this.drawCenteredImage(g2, this.selectImg, this.hovered.x * GamePanel.tileSize + pieceOffset, this.hovered.y * GamePanel.tileSize + pieceOffset, (int) (GamePanel.tileSize * this.selectScale));
+            this.drawCenteredImage(g2, this.selectImg, this.hovered.x * Game.tileSize + pieceOffset, this.hovered.y * Game.tileSize + pieceOffset, (int) (Game.tileSize * this.selectScale));
             this.selectScale = MathUtils.clamp(this.selectScale + this.animSpeed, 1F, 1.25F);
             this.animSpeed = !MathUtils.inRangeEx(this.selectScale, 1F, 1.25F) ? this.animSpeed * -1 : this.animSpeed;
         }

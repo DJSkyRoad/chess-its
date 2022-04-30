@@ -1,6 +1,6 @@
 package main.pieces;
 
-import main.Board;
+import main.gui.Board;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;

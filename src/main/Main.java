@@ -22,7 +22,7 @@ public class Main {
 
 		window.setResizable(false);
 
-    	GamePanel panel = new GamePanel();
+    	Game panel = new Game();
 		window.add(panel);
 		window.pack();
 
@@ -30,36 +30,5 @@ public class Main {
 		window.setVisible(true);
     	
     	panel.startGameThread();
-
-        /*Scanner scanner = new Scanner(System.in);
-
-        main.Board brd = new main.Board();
-        boolean whiteTurn = true;
-
-        while (true) {
-            System.out.println(brd);
-            System.out.print(whiteTurn ? "White's turn: " : "Black's turn: ");
-            String inp = scanner.nextLine(); // e.g. pb2-b3
-            char name = inp.charAt(0);
-            int xPiece = (int)inp.charAt(1) - 97;
-            int yPiece = main.Board.scale - Character.getNumericValue(inp.charAt(2));
-            int xDest = (int)inp.charAt(4) - 97;
-            int yDest = main.Board.scale - Character.getNumericValue(inp.charAt(5));
-            if (brd.check(name, whiteTurn, xPiece, yPiece, xDest, yDest)) {
-                if (brd.canEscapeCheckTo(name, whiteTurn, xPiece, yPiece, xDest, yDest)) {    //check
-                    brd.movePieceTo(xPiece, yPiece, xDest, yDest);
-                    whiteTurn = !whiteTurn;
-                } else {
-                    System.out.println("Invalid command! Please try again.");
-                }
-            } else {
-                if (brd.canMovePieceTo(name, whiteTurn, xPiece, yPiece, xDest, yDest)) {
-                    brd.movePieceTo(xPiece, yPiece, xDest, yDest);
-                    whiteTurn = !whiteTurn;
-                } else {
-                    System.out.println("Invalid command! Please try again.");
-                }
-            }
-        }*/
     }
 }

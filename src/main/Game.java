@@ -1,11 +1,13 @@
 package main;
 
-import main.math.ChessPos;
+import main.scenes.Scene;
+import main.scenes.TitleScene;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class GamePanel extends JPanel implements Runnable {
+public class Game extends JPanel implements Runnable {
+    public static Game INSTANCE;
     public static final int tileSize = 20 * 3;
     public static final int borderSize = 10;
     public static final int panelSize = tileSize * borderSize;
@@ -14,15 +16,27 @@ public class GamePanel extends JPanel implements Runnable {
     public static double deltaTime;
     private double intervalTime;
 
-    private final Board board = new Board();
+    private Scene scene;
 
     private Thread gameThread;
 
-    public GamePanel() {
+    public Game() {
+        INSTANCE = this;
         this.setPreferredSize(new Dimension(panelSize, panelSize));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.addMouseListener(this.mouseInput);
+
+        this.setScene(new TitleScene());
+    }
+
+    public Scene getScene() {
+        return this.scene;
+    }
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
+        this.scene.init();
     }
 
     public void startGameThread() {
@@ -34,42 +48,27 @@ public class GamePanel extends JPanel implements Runnable {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-
-        g2.setColor(Color.BLACK);
-        g2.fillRect(0, 0, panelSize, panelSize);
-
-        this.board.draw(g2);
-
-        g2.setColor(Color.WHITE);
-        g2.setFont(new Font("Helvetia", Font.BOLD, 30));
-        this.drawCenteredString(g2, this.board.whiteTurn ? "White's turn" : "Black's turn", this.getWidth() / 2, 60);
+        this.scene.resize(this.getWidth(), this.getHeight());
+        this.scene.draw(g2);
     }
 
-    public void drawCenteredString(Graphics2D g2, String text, int x, int y) {
+    public static void drawCenteredString(Graphics2D g2, String text, int x, int y) {
         FontMetrics metrics = g2.getFontMetrics(g2.getFont());
         x = x - metrics.stringWidth(text) / 2;
-        y = y - metrics.getHeight() / 2;
+        y = y - (metrics.getHeight() / 2) + metrics.getAscent();
         g2.drawString(text, x, y);
     }
 
     public void update() {
         Point pos = this.getMousePosition();
         if (pos != null) {
-            ChessPos chessPos = new ChessPos(pos.x / tileSize - 1, pos.y / tileSize - 1);
-
-            if (this.board.canSelect(chessPos)) this.board.hovered = chessPos;
-            else this.board.hovered = new ChessPos(-1, -1);
+            int x = pos.x;
+            int y = pos.y;
+            this.scene.onMouseHover(x, y);
 
             if (this.mouseInput.mouseClicked) {
                 this.mouseInput.mouseClicked = false;
-
-                if (this.board.selected.compare(chessPos)) this.board.selected = new ChessPos(-1, -1);
-                else if (this.board.canMoveSelectedTo(chessPos)) {
-                    this.board.moveSelectedTo(chessPos);
-                    this.board.selected = new ChessPos(-1, -1);
-                    this.board.whiteTurn = !this.board.whiteTurn;
-                }
-                else if (this.board.canSelect(chessPos)) this.board.selected = chessPos;
+                this.scene.onMouseClick(x, y);
             }
         }
 
@@ -88,10 +87,7 @@ public class GamePanel extends JPanel implements Runnable {
             this.deltaTime += (currentTime - lastTime) * 0.000000001D;
             lastTime = currentTime;
 
-
-
             if (intervalTime >= 1) {
-                // Update functions go here
                 this.update();
                 intervalTime--;
                 deltaTime = 0;
