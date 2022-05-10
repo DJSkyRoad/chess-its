@@ -26,6 +26,7 @@ public class Board {
 
     public ChessPos hovered = new ChessPos(-1, -1);
     public ChessPos selected = new ChessPos(-1, -1);
+    private ChessPos canMoveTo = new ChessPos(-1, -1);
 
     public ChessPiece[][] pos = {
             {new Rook(false), new Knight(false), new Bishop(false), new Queen(false), new King(false), new Bishop(false), new Knight(false), new Rook(false)},
@@ -52,169 +53,112 @@ public class Board {
                 && this.pos[chessPos.y][chessPos.x].white == this.whiteTurn)
                 || (this.selected.isValid() && this.canMoveSelectedTo(chessPos)));
     }
-    public List<ChessPos> isChecked(boolean white) {
-        List<ChessPos> list = new ArrayList<ChessPos>();
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (pos[i][j] != null && pos[i][j] instanceof King && ((King) pos[i][j]).white == white) {
-                    for (int k = i; k >= 0; k--) {
-                        if (pos[k][j] == null) {
-                            continue;
-                        }
-                        if (!(pos[k][j] instanceof Queen || pos[k][j] instanceof Rook) || pos[k][j].white == white) {
-                            break;
-                        }
-                        if (pos[k][j] instanceof Queen || pos[k][j] instanceof Rook) {
-                            list.add(new ChessPos(j, k));
-                        }
 
-                    }
-                    for (int l = i; l < 8; l++) {
-                        if (pos[l][j] == null) {
-                            continue;
-                        }
-                        if (!(pos[l][j] instanceof Queen || pos[l][j] instanceof Rook) || pos[l][j].white == white) {
-                            break;
-                        }
-                        if (pos[l][j] instanceof Queen || pos[l][j] instanceof Rook) {
-                            list.add(new ChessPos(j, l));
-                        }
+    public boolean isChecked(ChessPiece[][] pos, boolean white) {
+        ChessPos king = new ChessPos(-1, -1);
 
-                    }
-                    for (int m = j; m >= 0; m--) {
-                        if (pos[i][m] == null) {
-                            continue;
-                        }
-                        if (!(pos[i][m] instanceof Queen || pos[i][m] instanceof Rook) || pos[i][m].white == white) {
-                            break;
-                        }
-                        if (pos[i][m] instanceof Queen || pos[i][m] instanceof Rook) {
-                            list.add(new ChessPos(m, i));
-                        }
-                    }
-                    for (int m = j; m < 8; m++) {
-                        if (pos[i][m] == null) {
-                            continue;
-                        }
-                        if (!(pos[i][m] instanceof Queen || pos[i][m] instanceof Rook) || pos[i][m].white == white) {
-                            break;
-                        }
-                        if (pos[i][m] instanceof Queen || pos[i][m] instanceof Rook) {
-                            list.add(new ChessPos(m, i));
-                        }
-                    }
-                    int a = i;
-                    int b = j;
-                    while (a < 8 || b < 8) {
-                        if (pos[a][b] == null) {
-                            continue;
-                        }
-                        if (!(pos[a][b] instanceof Queen || pos[a][b] instanceof Bishop) || pos[a][b].white == white) {
-                            break;
-                        }
-                        if (pos[a][b] instanceof Queen || pos[a][b] instanceof Bishop) {
-                            list.add(new ChessPos(b, a));
-                        }
-                        a++;
-                        b++;
-                    }
-                    a = i;
-                    b = j;
-
-                    while (a >= 0 || b >= 0) {
-                        if (pos[a][b] == null) {
-                            continue;
-                        }
-                        if (!(pos[a][b] instanceof Queen || pos[a][b] instanceof Bishop) || pos[a][b].white == white) {
-                            break;
-                        }
-                        if (pos[a][b] instanceof Queen || pos[a][b] instanceof Bishop) {
-                            list.add(new ChessPos(b, a));
-                        }
-                        a--;
-                        b--;
-                    }
-                    a = i;
-                    b = j;
-
-                    while (a < 8 || b >= 0) {
-                        if (pos[a][b] == null) {
-                            continue;
-                        }
-                        if (!(pos[a][b] instanceof Queen || pos[a][b] instanceof Bishop) || pos[a][b].white == white) {
-                            break;
-                        }
-                        if (pos[a][b] instanceof Queen || pos[a][b] instanceof Bishop) {
-                            list.add(new ChessPos(b, a));
-                        }
-                        a++;
-                        b--;
-                    }
-                    a = i;
-                    b = j;
-
-                    while (a >= 0 || b < 8) {
-                        if (pos[a][b] == null) {
-                            continue;
-                        }
-                        if (!(pos[a][b] instanceof Queen || pos[a][b] instanceof Bishop) || pos[a][b].white == white) {
-                            break;
-                        }
-                        if (pos[a][b] instanceof Queen || pos[a][b] instanceof Bishop) {
-                            list.add(new ChessPos(b, a));
-                        }
-                        a--;
-                        b++;
-                    }
-                    if (pos[i + 1][j - 2] instanceof Knight && !(pos[i][j].white == white)) {
-                        list.add(new ChessPos(i + 1, j - 2));
-                    }
-                    if (pos[i + 2][j - 1] instanceof Knight && !(pos[i][j].white == white)) {
-                        list.add(new ChessPos(i + 2, j - 1));
-                    }
-                    if (pos[i + 2][j + 1] instanceof Knight && !(pos[i][j].white == white)) {
-                        list.add(new ChessPos(i + 2, j + 1));
-                    }
-                    if (pos[i + 1][j + 2] instanceof Knight && !(pos[i][j].white == white)) {
-                        list.add(new ChessPos(i + 1, j + 2));
-                    }
-                    if (pos[i - 1][j + 2] instanceof Knight && !(pos[i][j].white == white)) {
-                        list.add(new ChessPos(i - 1, j + 2));
-                    }
-                    if (pos[i - 2][j + 1] instanceof Knight && !(pos[i][j].white == white)) {
-                        list.add(new ChessPos(i - 2, j + 1));
-                    }
-                    if (pos[i - 2][j - 1] instanceof Knight && !(pos[i][j].white == white)) {
-                        list.add(new ChessPos(i - 2, j - 1));
-                    }
-                    if (pos[i - 1][j - 2] instanceof Knight && !(pos[i][j].white == white)) {
-                        list.add(new ChessPos(i - 1, j - 2));
-                    }
-
-                    if (pos[i][j].white) { //Black Pawn White King
-                        if (pos[i + 1][j + 1] instanceof Pawn) {
-                            list.add(new ChessPos(i + 1,j + 1));
-                        }
-                        if (pos[i - 1][j + 1] instanceof Pawn) {
-                            list.add(new ChessPos(i - 1,j + 1));
-                        }
-                    }
-                    if (!(pos[i][j].white)) { //White Pawn Black King
-                        if (pos[i + 1][j - 1] instanceof Pawn) {
-                            list.add(new ChessPos(i + 1,j - 1));
-                        }
-                        if (pos[i - 1][j - 1] instanceof Pawn) {
-                            list.add(new ChessPos(i - 1,j - 1));
-                        }
-                    }
-                    
+        for (int y = 0; y < 8; y++) {
+            for (int x = 0; x < 8; x++) {
+                if (pos[y][x] != null && pos[y][x] instanceof King && ((King) pos[y][x]).white == white) {
+                    king = new ChessPos(x, y);
                 }
             }
         }
+
+        // Check Lines
+        for (int k = king.y; k >= 0; k--) {
+            if (pos[k][king.x] == null) continue;
+            if (!(pos[k][king.x] instanceof Queen || pos[k][king.x] instanceof Rook) || pos[k][king.x].white == white) break;
+            return true;
+        }
+        for (int l = king.y; l < scale; l++) {
+            if (pos[l][king.x] == null) continue;
+            if (!(pos[l][king.x] instanceof Queen || pos[l][king.x] instanceof Rook) || pos[l][king.x].white == white) break;
+            return true;
+        }
+        for (int m = king.x; m >= 0; m--) {
+            if (pos[king.y][m] == null) continue;
+            if (!(pos[king.y][m] instanceof Queen || pos[king.y][m] instanceof Rook) || pos[king.y][m].white == white) break;
+            return true;
+        }
+        for (int m = king.x; m < scale; m++) {
+            if (pos[king.y][m] == null) continue;
+            if (!(pos[king.y][m] instanceof Queen || pos[king.y][m] instanceof Rook) || pos[king.y][m].white == white) break;
+            return true;
+        }
+
+        // Check Diagonal
+        int a = king.y; int b = king.x;
+        while (a < scale || b < 8) {
+            if (pos[a][b] == null) {
+                a++; b++;
+                continue;
+            }
+            if (!(pos[a][b] instanceof Queen || pos[a][b] instanceof Bishop) || pos[a][b].white == white) break;
+            return true;
+        }
+        a = king.y; b = king.x;
+        while (a >= 0 || b >= 0) {
+            if (pos[a][b] == null) {
+                a--; b--;
+                continue;
+            }
+            if (!(pos[a][b] instanceof Queen || pos[a][b] instanceof Bishop) || pos[a][b].white == white) break;
+            return true;
+        }
+        a = king.y; b = king.x;
+        while (a < scale || b >= 0) {
+            if (pos[a][b] == null) {
+                a++; b--;
+                continue;
+            }
+            if (!(pos[a][b] instanceof Queen || pos[a][b] instanceof Bishop) || pos[a][b].white == white) break;
+            return true;
+        }
+        a = king.y; b = king.x;
+        while (a >= 0 || b < scale) {
+            if (pos[a][b] == null) {
+                a--; b++;
+                continue;
+            }
+            if (!(pos[a][b] instanceof Queen || pos[a][b] instanceof Bishop) || pos[a][b].white == white) break;
+            return true;
+        }
+
+        // Check Knights
+        a = king.y + 1; b = king.x - 2;
+        if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Knight && pos[a][b].white != white) return true;
+        a = king.y + 2; b = king.x - 1;
+        if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Knight && pos[a][b].white != white) return true;
+        a = king.y + 2; b = king.x + 1;
+        if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Knight && pos[a][b].white != white) return true;
+        a = king.y + 1; b = king.x + 2;
+        if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Knight && pos[a][b].white != white) return true;
+        a = king.y - 1; b = king.x + 2;
+        if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Knight && pos[a][b].white != white) return true;
+        a = king.y - 2; b = king.x + 1;
+        if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Knight && pos[a][b].white != white) return true;
+        a = king.y - 2; b = king.x - 1;
+        if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Knight && pos[a][b].white != white) return true;
+        a = king.y - 1; b = king.x - 2;
+        if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Knight && pos[a][b].white != white) return true;
+
+        // Check Pawns
+        a = king.y + 1; b = king.x + 1;
+        if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Pawn && pos[a][b].white != white) return true;
+        a = king.y - 1; b = king.x - 1;
+        if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Pawn && pos[a][b].white != white) return true;
+        a = king.y + 1; b = king.x - 1;
+        if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Pawn && pos[a][b].white != white) return true;
+        a = king.y - 1; b = king.x + 1;
+        if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Pawn && pos[a][b].white != white) return true;
+
+        return false;
     }
 
     public boolean canMoveSelectedTo(ChessPos dest) {
         if (!this.selected.isValid() || !dest.isValid()) return false;
+        if (this.canMoveTo.compare(dest)) return true;
         ChessPiece piece = pos[this.selected.y][this.selected.x];
         ChessPiece destPiece = pos[dest.y][dest.x];
         if (piece == null
@@ -227,7 +171,29 @@ public class Board {
                 testPos = testPos.next(dest);
             }
         }
-        return piece.canMoveTo(this.selected.x, this.selected.y, dest.x, dest.y, destPiece != null);
+        if (piece.canMoveTo(this.selected, dest, destPiece != null)) {
+            ChessPiece[][] pos2 = this.copyPos();
+            ChessPiece p = pos2[this.selected.y][this.selected.x];
+            pos2[this.selected.y][this.selected.x] = null;
+            pos2[dest.y][dest.x] = p;
+
+            if (!this.isChecked(pos2, this.whiteTurn)) {
+                this.canMoveTo = dest;
+                return true;
+            }
+            else System.out.println("Check");
+        }
+        return false;
+    }
+
+    private ChessPiece[][] copyPos() {
+        ChessPiece[][] pos2 = new ChessPiece[this.pos.length][this.pos.length];
+        for (int y = 0; y < this.pos.length; y++) {
+            for (int x = 0; x < this.pos.length; x++) {
+                pos2[y][x] = this.pos[y][x];
+            }
+        }
+        return pos2;
     }
 
     public void moveSelectedTo(ChessPos dest) {
