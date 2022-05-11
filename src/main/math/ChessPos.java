@@ -11,17 +11,17 @@ public class ChessPos {
         this.y = y;
     }
 
-    public boolean compare(int x, int y) {
-        return this.x == x && this.y == y;
-    }
-
-    public boolean compare(ChessPos pos) {
+    public boolean equals(ChessPos pos) {
         return this.x == pos.x && this.y == pos.y;
     }
 
     public boolean isValid() {
         return MathUtils.inRange(this.x, 0, Board.scale - 1)
                 && MathUtils.inRange(this.y, 0, Board.scale - 1);
+    }
+
+    public ChessPos add(int x, int y) {
+        return new ChessPos(this.x + x, this.y + y);
     }
 
     public ChessPos next(ChessPos dest) {

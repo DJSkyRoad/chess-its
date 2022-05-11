@@ -31,10 +31,13 @@ public class GameScene extends Scene {
     @Override
     public void onMouseClick(int x, int y) {
         ChessPos chessPos = new ChessPos(x / Game.tileSize - 1, y / Game.tileSize - 1);
-        if (this.board.selected.compare(chessPos)) this.board.selected = new ChessPos(-1, -1);
+        if (this.board.selected.equals(chessPos)) this.board.selected = new ChessPos(-1, -1);
         else if (this.board.canMoveSelectedTo(chessPos)) {
             this.board.moveSelectedTo(chessPos);
             this.board.selected = new ChessPos(-1, -1);
+
+            if (this.board.isCheckMate()) System.out.println("Check mate");
+
             this.board.whiteTurn = !this.board.whiteTurn;
         }
         else if (this.board.canSelect(chessPos)) this.board.selected = chessPos;

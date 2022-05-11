@@ -3,6 +3,7 @@ package main.gui;
 import main.Game;
 import main.math.ChessPos;
 import main.math.MathUtils;
+import main.math.Move;
 import main.pieces.*;
 
 import javax.imageio.ImageIO;
@@ -11,10 +12,11 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Board {
     public static final int scale = 8;
-    private static final int offset = 1 * Game.tileSize;
+    private static final int offset = Game.tileSize;
     private static final int pieceScale = (int)(0.6F * Game.tileSize);
     private static final int pieceOffset = offset + Game.tileSize / 2;
 
@@ -41,11 +43,31 @@ public class Board {
 
     public Board() {
         try {
-            this.selectImg = ImageIO.read(getClass()
-                    .getResourceAsStream("/resources/select.png"));
+            this.selectImg = ImageIO.read(Objects.requireNonNull(getClass()
+                    .getResourceAsStream("/resources/select.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isCheckMate() {
+        if (!this.isChecked(this.pos, !this.whiteTurn)) return false;
+        List<Move> moves = this.generateMoves(!this.whiteTurn);
+        for (Move move : moves) {
+            if (!this.isChecked(move.getTestPosCopy(this.pos), !this.whiteTurn)) return false;
+        }
+        return true;
+    }
+
+    public List<Move> generateMoves(boolean white) {
+        List<Move> moves = new ArrayList<>();
+        for (int y = 0; y < this.pos.length; y++) {
+            for (int x = 0; x < this.pos.length; x++) {
+                ChessPiece piece = this.pos[y][x];
+                if (piece != null && piece.white == white) moves.addAll(piece.getMoves(new ChessPos(x, y), this.pos));
+            }
+        }
+        return moves;
     }
 
     public boolean canSelect(ChessPos chessPos) {
@@ -59,7 +81,7 @@ public class Board {
 
         for (int y = 0; y < 8; y++) {
             for (int x = 0; x < 8; x++) {
-                if (pos[y][x] != null && pos[y][x] instanceof King && ((King) pos[y][x]).white == white) {
+                if (pos[y][x] != null && pos[y][x] instanceof King && pos[y][x].white == white) {
                     king = new ChessPos(x, y);
                 }
             }
@@ -141,14 +163,12 @@ public class Board {
         a = king.y - 2; b = king.x - 1;
         if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Knight && pos[a][b].white != white) return true;
         a = king.y - 1; b = king.x - 2;
-        if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Knight && pos[a][b].white != white) return true;
-
-        return false;
+        return new ChessPos(b, a).isValid() && pos[a][b] instanceof Knight && pos[a][b].white != white;
     }
 
     public boolean canMoveSelectedTo(ChessPos dest) {
         if (!this.selected.isValid() || !dest.isValid()) return false;
-        if (this.canMoveTo.compare(dest)) return true;
+        if (this.canMoveTo.equals(dest)) return true;
         ChessPiece piece = pos[this.selected.y][this.selected.x];
         ChessPiece destPiece = pos[dest.y][dest.x];
         if (piece == null
@@ -177,10 +197,8 @@ public class Board {
 
     private ChessPiece[][] copyPos() {
         ChessPiece[][] pos2 = new ChessPiece[this.pos.length][this.pos.length];
-        for (int y = 0; y < this.pos.length; y++) {
-            for (int x = 0; x < this.pos.length; x++) {
-                pos2[y][x] = this.pos[y][x];
-            }
+        for (int i = 0; i < this.pos.length; i++) {
+            System.arraycopy(this.pos[i], 0, pos2[i], 0, this.pos.length);
         }
         return pos2;
     }
@@ -209,7 +227,7 @@ public class Board {
 
         if (this.selected.isValid())
             this.drawCenteredImage(g2, this.selectImg, this.selected.x * Game.tileSize + pieceOffset, this.selected.y * Game.tileSize + pieceOffset, Game.tileSize);
-        if (this.hovered.isValid() && !this.selected.compare(this.hovered)) {
+        if (this.hovered.isValid() && !this.selected.equals(this.hovered)) {
             this.drawCenteredImage(g2, this.selectImg, this.hovered.x * Game.tileSize + pieceOffset, this.hovered.y * Game.tileSize + pieceOffset, (int) (Game.tileSize * this.selectScale));
             this.selectScale = MathUtils.clamp(this.selectScale + this.animSpeed, 1F, 1.25F);
             this.animSpeed = !MathUtils.inRangeEx(this.selectScale, 1F, 1.25F) ? this.animSpeed * -1 : this.animSpeed;
