@@ -66,62 +66,62 @@ public class Board {
         }
 
         // Check Lines
-        for (int k = king.y; k >= 0; k--) {
+        for (int k = king.y - 1; k >= 0; k--) {
             if (pos[k][king.x] == null) continue;
-            if (!(pos[k][king.x] instanceof Queen || pos[k][king.x] instanceof Rook) || pos[k][king.x].white == white) break;
+            if (pos[k][king.x].white == white || !pos[k][king.x].canMoveTo(king.x, k, king.x, king.y, true)) break;
             return true;
         }
-        for (int l = king.y; l < scale; l++) {
+        for (int l = king.y + 1; l < scale; l++) {
             if (pos[l][king.x] == null) continue;
-            if (!(pos[l][king.x] instanceof Queen || pos[l][king.x] instanceof Rook) || pos[l][king.x].white == white) break;
+            if (pos[l][king.x].white == white || !pos[l][king.x].canMoveTo(king.x, l, king.x, king.y, true)) break;
             return true;
         }
-        for (int m = king.x; m >= 0; m--) {
+        for (int m = king.x - 1; m >= 0; m--) {
             if (pos[king.y][m] == null) continue;
-            if (!(pos[king.y][m] instanceof Queen || pos[king.y][m] instanceof Rook) || pos[king.y][m].white == white) break;
+            if (pos[king.y][m].white == white || !pos[king.y][m].canMoveTo(m, king.y, king.x, king.y, true)) break;
             return true;
         }
-        for (int m = king.x; m < scale; m++) {
+        for (int m = king.x + 1; m < scale; m++) {
             if (pos[king.y][m] == null) continue;
-            if (!(pos[king.y][m] instanceof Queen || pos[king.y][m] instanceof Rook) || pos[king.y][m].white == white) break;
+            if (pos[king.y][m].white == white || !pos[king.y][m].canMoveTo(m, king.y, king.x, king.y, true)) break;
             return true;
         }
 
         // Check Diagonal
-        int a = king.y; int b = king.x;
-        while (a < scale || b < 8) {
+        int a = king.y + 1; int b = king.x + 1;
+        while (a < scale && b < scale) {
             if (pos[a][b] == null) {
                 a++; b++;
                 continue;
             }
-            if (!(pos[a][b] instanceof Queen || pos[a][b] instanceof Bishop) || pos[a][b].white == white) break;
+            if (pos[a][b].white == white || !pos[a][b].canMoveTo(b, a, king.x, king.y, true)) break;
             return true;
         }
-        a = king.y; b = king.x;
-        while (a >= 0 || b >= 0) {
+        a = king.y - 1; b = king.x - 1;
+        while (a >= 0 && b >= 0) {
             if (pos[a][b] == null) {
                 a--; b--;
                 continue;
             }
-            if (!(pos[a][b] instanceof Queen || pos[a][b] instanceof Bishop) || pos[a][b].white == white) break;
+            if (pos[a][b].white == white || !pos[a][b].canMoveTo(b, a, king.x, king.y, true)) break;
             return true;
         }
-        a = king.y; b = king.x;
-        while (a < scale || b >= 0) {
+        a = king.y + 1; b = king.x - 1;
+        while (a < scale && b >= 0) {
             if (pos[a][b] == null) {
                 a++; b--;
                 continue;
             }
-            if (!(pos[a][b] instanceof Queen || pos[a][b] instanceof Bishop) || pos[a][b].white == white) break;
+            if (pos[a][b].white == white || !pos[a][b].canMoveTo(b, a, king.x, king.y, true)) break;
             return true;
         }
-        a = king.y; b = king.x;
-        while (a >= 0 || b < scale) {
+        a = king.y - 1; b = king.x + 1;
+        while (a >= 0 && b < scale) {
             if (pos[a][b] == null) {
                 a--; b++;
                 continue;
             }
-            if (!(pos[a][b] instanceof Queen || pos[a][b] instanceof Bishop) || pos[a][b].white == white) break;
+            if (pos[a][b].white == white || !pos[a][b].canMoveTo(b, a, king.x, king.y, true)) break;
             return true;
         }
 
@@ -142,16 +142,6 @@ public class Board {
         if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Knight && pos[a][b].white != white) return true;
         a = king.y - 1; b = king.x - 2;
         if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Knight && pos[a][b].white != white) return true;
-
-        // Check Pawns
-        a = king.y + 1; b = king.x + 1;
-        if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Pawn && pos[a][b].white != white) return true;
-        a = king.y - 1; b = king.x - 1;
-        if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Pawn && pos[a][b].white != white) return true;
-        a = king.y + 1; b = king.x - 1;
-        if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Pawn && pos[a][b].white != white) return true;
-        a = king.y - 1; b = king.x + 1;
-        if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Pawn && pos[a][b].white != white) return true;
 
         return false;
     }
@@ -181,7 +171,6 @@ public class Board {
                 this.canMoveTo = dest;
                 return true;
             }
-            else System.out.println("Check");
         }
         return false;
     }
