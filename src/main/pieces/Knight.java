@@ -21,20 +21,8 @@ public class Knight extends ChessPiece {
     }
 
     @Override
-    public boolean canMoveTo(int xPiece, int yPiece, int xDest, int yDest, boolean foeOnDest) {
-        int xDist = Math.abs(xDest - xPiece);
-        int yDist = Math.abs(yDest - yPiece);
-        return (xDist == 2 && yDist == 1) || (xDist == 1 && yDist == 2);
-    }
-
-    @Override
-    public char getName() {
-        return white ? 'n' : 'N';
-    }
-
-    @Override
     public String toString() {
-        return white ? "\u265E" : "\u2658";
+        return this.isWhite() ? "\u265E" : "\u2658";
     }
 
     @Override
@@ -54,7 +42,7 @@ public class Knight extends ChessPiece {
     }
 
     private void addIfPossible(List<Move> moves, ChessPos pos, ChessPos dest, ChessPiece[][] board) {
-        if (dest.isValid() && (board[dest.y][dest.x] == null || board[dest.y][dest.x].white != this.white))
+        if (dest.isValid() && (board[dest.y][dest.x] == null || board[dest.y][dest.x].isWhite() != this.isWhite()))
             moves.add(new Move(pos, dest));
     }
 }

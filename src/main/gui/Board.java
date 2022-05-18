@@ -28,7 +28,8 @@ public class Board {
 
     public ChessPos hovered = new ChessPos(-1, -1);
     public ChessPos selected = new ChessPos(-1, -1);
-    private ChessPos canMoveTo = new ChessPos(-1, -1);
+    
+    private List<Move> moves;
 
     public ChessPiece[][] pos = {
             {new Rook(false), new Knight(false), new Bishop(false), new Queen(false), new King(false), new Bishop(false), new Knight(false), new Rook(false)},
@@ -48,149 +49,52 @@ public class Board {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.refreshMoves();
+    }
+    
+    public void refreshMoves() {
+    	this.moves = this.generateAllMoves(this.pos, this.whiteTurn);
+        this.moves = this.getLegalMoves(this.moves, this.whiteTurn);
     }
 
     public boolean isCheckMate() {
-        if (!this.isChecked(this.pos, !this.whiteTurn)) return false;
-        List<Move> moves = this.generateMoves(!this.whiteTurn);
-        for (Move move : moves) {
-            if (!this.isChecked(move.getTestPosCopy(this.pos), !this.whiteTurn)) return false;
-        }
-        return true;
+        return this.moves.isEmpty();
     }
 
-    public List<Move> generateMoves(boolean white) {
+    private List<Move> generateAllMoves(ChessPiece[][] pos, boolean white) {
         List<Move> moves = new ArrayList<>();
-        for (int y = 0; y < this.pos.length; y++) {
-            for (int x = 0; x < this.pos.length; x++) {
-                ChessPiece piece = this.pos[y][x];
-                if (piece != null && piece.white == white) moves.addAll(piece.getMoves(new ChessPos(x, y), this.pos));
+        for (int y = 0; y < pos.length; y++) {
+            for (int x = 0; x < pos.length; x++) {
+                ChessPiece piece = pos[y][x];
+                if (piece != null && piece.isWhite() == white) moves.addAll(piece.getMoves(new ChessPos(x, y), pos));
             }
         }
         return moves;
     }
 
-    public boolean canSelect(ChessPos chessPos) {
-        return chessPos.isValid() && ((this.pos[chessPos.y][chessPos.x] != null
-                && this.pos[chessPos.y][chessPos.x].white == this.whiteTurn)
-                || (this.selected.isValid() && this.canMoveSelectedTo(chessPos)));
+    private List<Move> getLegalMoves(List<Move> moves, boolean white) {
+        List<Move> newMoves = new ArrayList<>();
+        for (Move move : moves) {
+            ChessPiece[][] postField = move.getTestPosCopy(this.pos);
+            List<Move> postMoves = this.generateAllMoves(postField, !white);
+            for (Move postMove : postMoves) {
+                ChessPiece piece = postField[postMove.dest.y][postMove.dest.x];
+                if (!piece.isKing() || piece.isWhite() != white) newMoves.add(move);
+            }
+        }
+        return newMoves;
     }
 
-    public boolean isChecked(ChessPiece[][] pos, boolean white) {
-        ChessPos king = new ChessPos(-1, -1);
-
-        for (int y = 0; y < 8; y++) {
-            for (int x = 0; x < 8; x++) {
-                if (pos[y][x] != null && pos[y][x] instanceof King && pos[y][x].white == white) {
-                    king = new ChessPos(x, y);
-                }
-            }
-        }
-
-        // Check Lines
-        for (int k = king.y - 1; k >= 0; k--) {
-            if (pos[k][king.x] == null) continue;
-            if (pos[k][king.x].white == white || !pos[k][king.x].canMoveTo(king.x, k, king.x, king.y, true)) break;
-            return true;
-        }
-        for (int l = king.y + 1; l < scale; l++) {
-            if (pos[l][king.x] == null) continue;
-            if (pos[l][king.x].white == white || !pos[l][king.x].canMoveTo(king.x, l, king.x, king.y, true)) break;
-            return true;
-        }
-        for (int m = king.x - 1; m >= 0; m--) {
-            if (pos[king.y][m] == null) continue;
-            if (pos[king.y][m].white == white || !pos[king.y][m].canMoveTo(m, king.y, king.x, king.y, true)) break;
-            return true;
-        }
-        for (int m = king.x + 1; m < scale; m++) {
-            if (pos[king.y][m] == null) continue;
-            if (pos[king.y][m].white == white || !pos[king.y][m].canMoveTo(m, king.y, king.x, king.y, true)) break;
-            return true;
-        }
-
-        // Check Diagonal
-        int a = king.y + 1; int b = king.x + 1;
-        while (a < scale && b < scale) {
-            if (pos[a][b] == null) {
-                a++; b++;
-                continue;
-            }
-            if (pos[a][b].white == white || !pos[a][b].canMoveTo(b, a, king.x, king.y, true)) break;
-            return true;
-        }
-        a = king.y - 1; b = king.x - 1;
-        while (a >= 0 && b >= 0) {
-            if (pos[a][b] == null) {
-                a--; b--;
-                continue;
-            }
-            if (pos[a][b].white == white || !pos[a][b].canMoveTo(b, a, king.x, king.y, true)) break;
-            return true;
-        }
-        a = king.y + 1; b = king.x - 1;
-        while (a < scale && b >= 0) {
-            if (pos[a][b] == null) {
-                a++; b--;
-                continue;
-            }
-            if (pos[a][b].white == white || !pos[a][b].canMoveTo(b, a, king.x, king.y, true)) break;
-            return true;
-        }
-        a = king.y - 1; b = king.x + 1;
-        while (a >= 0 && b < scale) {
-            if (pos[a][b] == null) {
-                a--; b++;
-                continue;
-            }
-            if (pos[a][b].white == white || !pos[a][b].canMoveTo(b, a, king.x, king.y, true)) break;
-            return true;
-        }
-
-        // Check Knights
-        a = king.y + 1; b = king.x - 2;
-        if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Knight && pos[a][b].white != white) return true;
-        a = king.y + 2; b = king.x - 1;
-        if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Knight && pos[a][b].white != white) return true;
-        a = king.y + 2; b = king.x + 1;
-        if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Knight && pos[a][b].white != white) return true;
-        a = king.y + 1; b = king.x + 2;
-        if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Knight && pos[a][b].white != white) return true;
-        a = king.y - 1; b = king.x + 2;
-        if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Knight && pos[a][b].white != white) return true;
-        a = king.y - 2; b = king.x + 1;
-        if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Knight && pos[a][b].white != white) return true;
-        a = king.y - 2; b = king.x - 1;
-        if (new ChessPos(b, a).isValid() && pos[a][b] instanceof Knight && pos[a][b].white != white) return true;
-        a = king.y - 1; b = king.x - 2;
-        return new ChessPos(b, a).isValid() && pos[a][b] instanceof Knight && pos[a][b].white != white;
+    public boolean canSelect(ChessPos chessPos) {
+        return chessPos.isValid() && ((this.pos[chessPos.y][chessPos.x] != null
+                && this.pos[chessPos.y][chessPos.x].isWhite() == this.whiteTurn)
+                || (this.selected.isValid() && this.canMoveSelectedTo(chessPos)));
     }
 
     public boolean canMoveSelectedTo(ChessPos dest) {
         if (!this.selected.isValid() || !dest.isValid()) return false;
-        if (this.canMoveTo.equals(dest)) return true;
-        ChessPiece piece = pos[this.selected.y][this.selected.x];
-        ChessPiece destPiece = pos[dest.y][dest.x];
-        if (piece == null
-                || piece.white != this.whiteTurn
-                || (destPiece != null && destPiece.white == this.whiteTurn)) return false;
-        if (!(piece instanceof Knight)) {
-            ChessPos testPos = this.selected.next(dest);
-            while (Math.abs(dest.x - testPos.x) > 0 || Math.abs(dest.y - testPos.y) > 0) {
-                if (testPos.isValid() && pos[testPos.y][testPos.x] != null) return false;
-                testPos = testPos.next(dest);
-            }
-        }
-        if (piece.canMoveTo(this.selected, dest, destPiece != null)) {
-            ChessPiece[][] pos2 = this.copyPos();
-            ChessPiece p = pos2[this.selected.y][this.selected.x];
-            pos2[this.selected.y][this.selected.x] = null;
-            pos2[dest.y][dest.x] = p;
-
-            if (!this.isChecked(pos2, this.whiteTurn)) {
-                this.canMoveTo = dest;
-                return true;
-            }
+        for (Move move : this.moves) {
+            if (move.pos.equals(this.selected) && move.dest.equals(dest)) return true;
         }
         return false;
     }
@@ -221,7 +125,7 @@ public class Board {
         for (int x = 0; x < scale; x++) {
             for (int y = 0; y < scale; y++) {
                 if (this.pos[y][x] == null) continue;
-                this.drawCenteredImage(g2, this.pos[y][x].image, x * Game.tileSize + pieceOffset, y * Game.tileSize + pieceOffset, pieceScale);
+                this.drawCenteredImage(g2, this.pos[y][x].getImage(), x * Game.tileSize + pieceOffset, y * Game.tileSize + pieceOffset, pieceScale);
             }
         }
 

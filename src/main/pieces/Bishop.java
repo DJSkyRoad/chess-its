@@ -22,18 +22,8 @@ public class Bishop extends ChessPiece {
     }
 
     @Override
-    public boolean canMoveTo(int xPiece, int yPiece, int xDest, int yDest, boolean foeOnDest) {
-        return Math.abs(xDest - xPiece) == Math.abs(yDest - yPiece);
-    }
-
-    @Override
-    public char getName() {
-        return white ? 'b' : 'B';
-    }
-
-    @Override
     public String toString() {
-        return white ? "\u265D" : "\u2657";
+        return this.isWhite() ? "\u265D" : "\u2657";
     }
 
     @Override
@@ -42,30 +32,30 @@ public class Bishop extends ChessPiece {
         for (int i = 0; pos.x + i < Board.scale && pos.y + i < Board.scale; i++) {
             int x = pos.x + i; int y = pos.y + i;
             ChessPiece piece = board[y][x];
-            if (piece != null && piece.white == this.white) break;
+            if (piece != null && piece.isWhite() == this.isWhite()) break;
             moves.add(new Move(pos, new ChessPos(x, y)));
-            if (piece != null && piece.white != this.white) break;
+            if (piece != null && piece.isWhite() != this.isWhite()) break;
         }
         for (int i = 0; pos.x - i < Board.scale && pos.y - i < Board.scale; i++) {
             int x = pos.x - i; int y = pos.y - i;
             ChessPiece piece = board[y][x];
-            if (piece != null && piece.white == this.white) break;
+            if (piece != null && piece.isWhite() == this.isWhite()) break;
             moves.add(new Move(pos, new ChessPos(x, y)));
-            if (piece != null && piece.white != this.white) break;
+            if (piece != null && piece.isWhite() != this.isWhite()) break;
         }
         for (int i = 0; pos.x + i < Board.scale && pos.y - i < Board.scale; i++) {
             int x = pos.x + i; int y = pos.y - i;
             ChessPiece piece = board[y][x];
-            if (piece != null && piece.white == this.white) break;
+            if (piece != null && piece.isWhite() == this.isWhite()) break;
             moves.add(new Move(pos, new ChessPos(x, y)));
-            if (piece != null && piece.white != this.white) break;
+            if (piece != null && piece.isWhite() != this.isWhite()) break;
         }
         for (int i = 0; pos.x - i < Board.scale && pos.y + i < Board.scale; i++) {
             int x = pos.x - i; int y = pos.y + i;
             ChessPiece piece = board[y][x];
-            if (piece != null && piece.white == this.white) break;
+            if (piece != null && piece.isWhite() == this.isWhite()) break;
             moves.add(new Move(pos, new ChessPos(x, y)));
-            if (piece != null && piece.white != this.white) break;
+            if (piece != null && piece.isWhite() != this.isWhite()) break;
         }
         return moves;
     }

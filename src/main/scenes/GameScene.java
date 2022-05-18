@@ -36,9 +36,10 @@ public class GameScene extends Scene {
             this.board.moveSelectedTo(chessPos);
             this.board.selected = new ChessPos(-1, -1);
 
-            if (this.board.isCheckMate()) System.out.println("Check mate");
-
             this.board.whiteTurn = !this.board.whiteTurn;
+            this.board.refreshMoves();
+            if (this.board.isCheckMate()) System.out.println("Check mate");
+            
         }
         else if (this.board.canSelect(chessPos)) this.board.selected = chessPos;
     }
