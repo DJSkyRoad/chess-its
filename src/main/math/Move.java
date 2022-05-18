@@ -2,14 +2,7 @@ package main.math;
 
 import main.pieces.ChessPiece;
 
-public class Move {
-    public final ChessPos pos;
-    public final ChessPos dest;
-
-    public Move(ChessPos pos, ChessPos dest) {
-        this.pos = pos;
-        this.dest = dest;
-    }
+public record Move(ChessPos pos, ChessPos dest) {
 
     public ChessPiece[][] getTestPosCopy(ChessPiece[][] original) {
         ChessPiece[][] test = new ChessPiece[original.length][original.length];
