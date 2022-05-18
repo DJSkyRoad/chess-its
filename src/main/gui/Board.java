@@ -5,6 +5,7 @@ import main.math.ChessPos;
 import main.math.MathUtils;
 import main.math.Move;
 import main.pieces.*;
+import main.scenes.GameOverScene;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -64,8 +65,9 @@ public class Board {
         boolean checked = this.isChecked(this.moves, this.pos, !this.whiteTurn);
         this.generateMoves(!this.whiteTurn);
         if (this.moves.isEmpty()) {
-            if (checked) System.out.println("checkmate");
-            else System.out.println("patt");
+            String title = checked ? "Checkmate" : "Patt";
+            String subtitle = this.whiteTurn ? "White won" : "Black won";
+            Game.INSTANCE.setScene(new GameOverScene(title, subtitle));
         }
 
         this.whiteTurn = !this.whiteTurn;
