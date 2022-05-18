@@ -49,16 +49,26 @@ public class Board {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.refreshMoves();
+        this.generateMoves(this.whiteTurn);
     }
     
-    public void refreshMoves() {
-    	this.moves = this.generateAllMoves(this.pos, this.whiteTurn);
-        this.moves = this.getLegalMoves(this.moves, this.whiteTurn);
+    public void generateMoves(boolean white) {
+    	this.moves = this.generateAllMoves(this.pos, white);
+        this.moves = this.getLegalMoves(this.moves, white);
     }
 
-    public boolean isCheckMate() {
-        return this.moves.isEmpty();
+    public void changeTurn() {
+        this.selected = new ChessPos(-1, -1);
+
+        this.generateMoves(this.whiteTurn);
+        boolean checked = this.isChecked(this.moves, this.pos, !this.whiteTurn);
+        this.generateMoves(!this.whiteTurn);
+        if (this.moves.isEmpty()) {
+            if (checked) System.out.println("checkmate");
+            else System.out.println("patt");
+        }
+
+        this.whiteTurn = !this.whiteTurn;
     }
 
     private List<Move> generateAllMoves(ChessPiece[][] pos, boolean white) {
@@ -75,14 +85,21 @@ public class Board {
     private List<Move> getLegalMoves(List<Move> moves, boolean white) {
         List<Move> newMoves = new ArrayList<>();
         for (Move move : moves) {
+            // test move
             ChessPiece[][] postField = move.getTestPosCopy(this.pos);
             List<Move> postMoves = this.generateAllMoves(postField, !white);
-            for (Move postMove : postMoves) {
-                ChessPiece piece = postField[postMove.dest.y][postMove.dest.x];
-                if (!piece.isKing() || piece.isWhite() != white) newMoves.add(move);
-            }
+            // check whether the move was illegal
+            if (!this.isChecked(postMoves, postField, white)) newMoves.add(move);
         }
         return newMoves;
+    }
+
+    private boolean isChecked(List<Move> moves, ChessPiece[][] board, boolean white) {
+        for (Move postMove : moves) {
+            ChessPiece piece = board[postMove.dest.y][postMove.dest.x];
+            if (piece != null && piece.isKing() && piece.isWhite() == white) return true;
+        }
+        return false;
     }
 
     public boolean canSelect(ChessPos chessPos) {
