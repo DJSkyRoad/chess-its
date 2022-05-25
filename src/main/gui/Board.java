@@ -3,16 +3,13 @@ package main.gui;
 import main.Game;
 import main.math.ChessPos;
 import main.math.MathUtils;
-import main.math.Move;
 import main.pieces.*;
-import main.scenes.GameOverScene;
+import main.scenes.GameScene;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class Board {
@@ -25,22 +22,18 @@ public class Board {
     private float selectScale = 1.25F;
     private float animSpeed = 0.015F;
 
-    public boolean whiteTurn = true;
-
     public ChessPos hovered = new ChessPos(-1, -1);
     public ChessPos selected = new ChessPos(-1, -1);
-    
-    private List<Move> moves;
 
     public ChessPiece[][] pos = {
-            {new Rook(false), new Knight(false), new Bishop(false), new Queen(false), new King(false), new Bishop(false), new Knight(false), new Rook(false)},
-            {new Pawn(false), new Pawn(false), new Pawn(false), new Pawn(false), new Pawn(false), new Pawn(false), new Pawn(false), new Pawn(false)},
+            {new Rook(GameScene.Faction.BLACK), new Knight(GameScene.Faction.BLACK), new Bishop(GameScene.Faction.BLACK), new Queen(GameScene.Faction.BLACK), new King(GameScene.Faction.BLACK), new Bishop(GameScene.Faction.BLACK), new Knight(GameScene.Faction.BLACK), new Rook(GameScene.Faction.BLACK)},
+            {new Pawn(GameScene.Faction.BLACK), new Pawn(GameScene.Faction.BLACK), new Pawn(GameScene.Faction.BLACK), new Pawn(GameScene.Faction.BLACK), new Pawn(GameScene.Faction.BLACK), new Pawn(GameScene.Faction.BLACK), new Pawn(GameScene.Faction.BLACK), new Pawn(GameScene.Faction.BLACK)},
             {null,null,null,null,null,null,null,null},
             {null,null,null,null,null,null,null,null},
             {null,null,null,null,null,null,null,null},
             {null,null,null,null,null,null,null,null},
-            {new Pawn(true), new Pawn(true), new Pawn(true), new Pawn(true), new Pawn(true), new Pawn(true), new Pawn(true), new Pawn(true)},
-            {new Rook(true), new Knight(true), new Bishop(true), new Queen(true), new King(true), new Bishop(true), new Knight(true), new Rook(true)}
+            {new Pawn(GameScene.Faction.WHITE), new Pawn(GameScene.Faction.WHITE), new Pawn(GameScene.Faction.WHITE), new Pawn(GameScene.Faction.WHITE), new Pawn(GameScene.Faction.WHITE), new Pawn(GameScene.Faction.WHITE), new Pawn(GameScene.Faction.WHITE), new Pawn(GameScene.Faction.WHITE)},
+            {new Rook(GameScene.Faction.WHITE), new Knight(GameScene.Faction.WHITE), new Bishop(GameScene.Faction.WHITE), new Queen(GameScene.Faction.WHITE), new King(GameScene.Faction.WHITE), new Bishop(GameScene.Faction.WHITE), new Knight(GameScene.Faction.WHITE), new Rook(GameScene.Faction.WHITE)}
     };
 
     public Board() {
@@ -50,86 +43,6 @@ public class Board {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.generateMoves(this.whiteTurn);
-    }
-    
-    public void generateMoves(boolean white) {
-    	this.moves = this.generateAllMoves(this.pos, white);
-        this.moves = this.getLegalMoves(this.moves, white);
-    }
-
-    public void changeTurn() {
-        this.selected = new ChessPos(-1, -1);
-
-        this.generateMoves(this.whiteTurn);
-        boolean checked = this.isChecked(this.moves, this.pos, !this.whiteTurn);
-        this.generateMoves(!this.whiteTurn);
-        if (this.moves.isEmpty()) {
-            String title = checked ? "Checkmate" : "Patt";
-            String subtitle = this.whiteTurn ? "White won" : "Black won";
-            Game.INSTANCE.setScene(new GameOverScene(title, subtitle));
-        }
-
-        this.whiteTurn = !this.whiteTurn;
-    }
-
-    private List<Move> generateAllMoves(ChessPiece[][] pos, boolean white) {
-        List<Move> moves = new ArrayList<>();
-        for (int y = 0; y < pos.length; y++) {
-            for (int x = 0; x < pos.length; x++) {
-                ChessPiece piece = pos[y][x];
-                if (piece != null && piece.isWhite() == white) moves.addAll(piece.getMoves(new ChessPos(x, y), pos));
-            }
-        }
-        return moves;
-    }
-
-    private List<Move> getLegalMoves(List<Move> moves, boolean white) {
-        List<Move> newMoves = new ArrayList<>();
-        for (Move move : moves) {
-            // test move
-            ChessPiece[][] postField = move.getTestPosCopy(this.pos);
-            List<Move> postMoves = this.generateAllMoves(postField, !white);
-            // check whether the move was illegal
-            if (!this.isChecked(postMoves, postField, white)) newMoves.add(move);
-        }
-        return newMoves;
-    }
-
-    private boolean isChecked(List<Move> moves, ChessPiece[][] board, boolean white) {
-        for (Move postMove : moves) {
-            ChessPiece piece = board[postMove.dest.y][postMove.dest.x];
-            if (piece != null && piece.isKing() && piece.isWhite() == white) return true;
-        }
-        return false;
-    }
-
-    public boolean canSelect(ChessPos chessPos) {
-        return chessPos.isValid() && ((this.pos[chessPos.y][chessPos.x] != null
-                && this.pos[chessPos.y][chessPos.x].isWhite() == this.whiteTurn)
-                || (this.selected.isValid() && this.canMoveSelectedTo(chessPos)));
-    }
-
-    public boolean canMoveSelectedTo(ChessPos dest) {
-        if (!this.selected.isValid() || !dest.isValid()) return false;
-        for (Move move : this.moves) {
-            if (move.pos.equals(this.selected) && move.dest.equals(dest)) return true;
-        }
-        return false;
-    }
-
-    private ChessPiece[][] copyPos() {
-        ChessPiece[][] pos2 = new ChessPiece[this.pos.length][this.pos.length];
-        for (int i = 0; i < this.pos.length; i++) {
-            System.arraycopy(this.pos[i], 0, pos2[i], 0, this.pos.length);
-        }
-        return pos2;
-    }
-
-    public void moveSelectedTo(ChessPos dest) {
-        ChessPiece piece = pos[this.selected.y][this.selected.x];
-        pos[this.selected.y][this.selected.x] = null;
-        pos[dest.y][dest.x] = piece;
     }
 
     public void draw(Graphics2D g2) {

@@ -22,6 +22,10 @@ public class Button {
         this.clickEvent = clickEvent;
     }
 
+    public void setTitle(String value) {
+        this.title = value;
+    }
+
     public boolean isColliding(int x, int y) {
         return MathUtils.inRange(x, this.x - (this.width / 2), this.x + (this.width / 2))
                 && MathUtils.inRange(y, this.y - (this.height / 2), this.y + (this.height / 2));

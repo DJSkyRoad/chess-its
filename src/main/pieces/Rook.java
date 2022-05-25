@@ -1,21 +1,20 @@
 package main.pieces;
 
-import main.gui.Board;
 import main.math.ChessPos;
 import main.math.Move;
+import main.scenes.GameScene;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Rook extends ChessPiece {
-    public Rook(boolean white) {
-        super(white);
+    public Rook(GameScene.Faction faction) {
+        super(faction);
         try {
             this.image = ImageIO.read(Objects.requireNonNull(getClass()
-                    .getResourceAsStream(white ? "/resources/white_rook.png" : "/resources/black_rook.png")));
+                    .getResourceAsStream(faction.isWhite() ? "/resources/white_rook.png" : "/resources/black_rook.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -23,7 +22,7 @@ public class Rook extends ChessPiece {
 
     @Override
     public String toString() {
-        return this.isWhite() ? "\u265C" : "\u2656";
+        return this.getFaction().isWhite() ? "\u265C" : "\u2656";
     }
 
     @Override

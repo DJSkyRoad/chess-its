@@ -2,6 +2,7 @@ package main.pieces;
 
 import main.math.ChessPos;
 import main.math.Move;
+import main.scenes.GameScene;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -10,11 +11,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class King extends ChessPiece {
-    public King(boolean white) {
-        super(white);
+    public King(GameScene.Faction faction) {
+        super(faction);
         try {
             this.image = ImageIO.read(Objects.requireNonNull(getClass()
-                    .getResourceAsStream(white ? "/resources/white_king.png" : "/resources/black_king.png")));
+                    .getResourceAsStream(faction.isWhite() ? "/resources/white_king.png" : "/resources/black_king.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -22,7 +23,7 @@ public class King extends ChessPiece {
 
     @Override
     public String toString() {
-        return this.isWhite() ? "\u265A" : "\u2654";
+        return this.getFaction().isWhite() ? "\u265A" : "\u2654";
     }
 
     @Override
@@ -43,7 +44,7 @@ public class King extends ChessPiece {
     }
 
     private void addIfPossible(List<Move> moves, ChessPos pos, ChessPos dest, ChessPiece[][] board) {
-        if (dest.isValid() && (board[dest.y][dest.x] == null || board[dest.y][dest.x].isWhite() != this.isWhite()))
+        if (dest.isValid() && (board[dest.y][dest.x] == null || board[dest.y][dest.x].getFaction() != this.getFaction()))
             moves.add(new Move(pos, dest));
     }
 

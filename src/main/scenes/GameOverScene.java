@@ -16,7 +16,7 @@ public class GameOverScene extends Scene {
 
     @Override
     public void init() {
-        this.addButton(new Button("Try again", Game.panelSize / 2, Game.panelSize / 2, 200, 50, (button) -> Game.INSTANCE.setScene(new GameScene())));
+        this.addButton(new Button("Go back", Game.panelSize / 2, Game.panelSize / 2, 200, 50, (button) -> Game.INSTANCE.setScene(new TitleScene())));
     }
 
     @Override

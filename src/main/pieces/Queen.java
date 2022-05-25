@@ -1,8 +1,8 @@
 package main.pieces;
 
-import main.gui.Board;
 import main.math.ChessPos;
 import main.math.Move;
+import main.scenes.GameScene;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class Queen extends ChessPiece {
-    public Queen(boolean white) {
-        super(white);
+    public Queen(GameScene.Faction faction) {
+        super(faction);
         try {
             this.image = ImageIO.read(Objects.requireNonNull(getClass()
-                    .getResourceAsStream(white ? "/resources/white_queen.png" : "/resources/black_queen.png")));
+                    .getResourceAsStream(faction.isWhite() ? "/resources/white_queen.png" : "/resources/black_queen.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -23,7 +23,7 @@ public class Queen extends ChessPiece {
 
     @Override
     public String toString() {
-        return this.isWhite() ? "\u265B" : "\u2655";
+        return this.getFaction().isWhite() ? "\u265B" : "\u2655";
     }
 
     @Override
