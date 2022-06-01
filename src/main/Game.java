@@ -1,5 +1,8 @@
 package main;
 
+import main.networking.connection.Client;
+import main.networking.connection.Connection;
+import main.networking.connection.Server;
 import main.scenes.Scene;
 import main.scenes.TitleScene;
 
@@ -20,6 +23,8 @@ public class Game extends JPanel implements Runnable {
 
     private Thread gameThread;
 
+    private Connection networkManager;
+
     public Game() {
         INSTANCE = this;
         this.setPreferredSize(new Dimension(panelSize, panelSize));
@@ -30,13 +35,30 @@ public class Game extends JPanel implements Runnable {
         this.setScene(new TitleScene());
     }
 
-    public Scene getScene() {
-        return this.scene;
+    public void startServer() {
+        this.networkManager = new Server(1234);
+    }
+
+    public void startClient() {
+        this.networkManager = new Client("localhost", 1234);
+    }
+
+    public Connection getNetworkManager() {
+        return this.networkManager;
+    }
+
+    public void closeNetworkManager() {
+        this.networkManager.close();
+        this.networkManager = null;
     }
 
     public void setScene(Scene scene) {
         this.scene = scene;
         this.scene.init();
+    }
+
+    public Scene getScene() {
+        return this.scene;
     }
 
     public void startGameThread() {
@@ -71,7 +93,6 @@ public class Game extends JPanel implements Runnable {
                 this.scene.onMouseClick(x, y);
             }
         }
-
         this.repaint();
     }
 

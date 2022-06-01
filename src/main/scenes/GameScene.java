@@ -25,6 +25,9 @@ public class GameScene extends Scene {
         this.playerFaction = playerFaction;
         this.currentTurn = Faction.WHITE;
 
+        if (gameMode == GameMode.PVPHOST) Game.INSTANCE.startServer();
+        else if (gameMode == GameMode.PVPGUEST) Game.INSTANCE.startClient();
+
         this.generateMoves(this.currentTurn);
 
         if (this.currentTurn != this.playerFaction && this.gameMode == GameMode.PVC) {
@@ -69,9 +72,7 @@ public class GameScene extends Scene {
         boolean checked = this.isChecked(this.moves, this.board.pos, this.currentTurn.opposite());
         this.generateMoves(this.currentTurn.opposite());
         if (this.moves.isEmpty()) {
-            String title = checked ? "Checkmate" : "Patt";
-            String subtitle = this.currentTurn+" won";
-            Game.INSTANCE.setScene(new GameOverScene(title, subtitle));
+            this.onGameOver(checked);
             return;
         }
 
@@ -80,6 +81,13 @@ public class GameScene extends Scene {
         if (this.currentTurn != this.playerFaction && this.gameMode == GameMode.PVC) {
             this.doAITurn();
         }
+    }
+
+    private void onGameOver(boolean checked) {
+        String title = checked ? "Checkmate" : "Patt";
+        String subtitle = this.currentTurn+" won";
+        Game.INSTANCE.closeNetworkManager();
+        Game.INSTANCE.setScene(new GameOverScene(title, subtitle));
     }
 
     private void doAITurn() {
@@ -198,15 +206,21 @@ public class GameScene extends Scene {
     }
 
     public enum GameMode {
-        SCHIZOPHRENIC, PVC;
+        OFFLINEPVP, PVC, PVPHOST, PVPGUEST;
 
         @Override
         public String toString() {
             switch(this) {
                 default:
-                case SCHIZOPHRENIC: return "Schizophrenic";
-                case PVC: return "Player vs. Computer";
+                case OFFLINEPVP: return "Offline PvP";
+                case PVC: return "PvC";
+                case PVPHOST: return "PvP Host";
+                case PVPGUEST: return "PvP Guest";
             }
+        }
+
+        public boolean isOnline() {
+            return this == PVPHOST || this == PVPGUEST;
         }
 
         public GameMode next() {

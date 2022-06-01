@@ -12,6 +12,7 @@ public class Button {
     private int width;
     private int height;
     private boolean hovering;
+    private boolean active;
     private ClickEvent clickEvent;
 
     public Button(String title, int x, int y, int width, int height, ClickEvent clickEvent) {
@@ -21,6 +22,11 @@ public class Button {
         this.width = width;
         this.height = height;
         this.clickEvent = clickEvent;
+        this.active = true;
+    }
+
+    public void setActive(boolean value) {
+        this.active = value;
     }
 
     public void setTitle(String value) {
@@ -37,15 +43,15 @@ public class Button {
     }
 
     public void draw(Graphics2D g2) {
-        g2.setColor(this.hovering ? Color.LIGHT_GRAY : Color.GRAY);
+        g2.setColor(!this.active ? Color.DARK_GRAY : this.hovering ? Color.LIGHT_GRAY : Color.GRAY);
         g2.fillRect(this.x - (this.width / 2), this.y - (this.height / 2), this.width, this.height);
 
-        g2.setColor(Color.WHITE);
+        g2.setColor(this.active ? Color.WHITE : Color.GRAY);
         g2.setFont(new Font("Helvetia", Font.PLAIN, 20));
         Game.drawCenteredString(g2, this.title, this.x, this.y);
     }
 
     public void onClick() {
-        this.clickEvent.onClick(this);
+        if (this.active) this.clickEvent.onClick(this);
     }
 }
