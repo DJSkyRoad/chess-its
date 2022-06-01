@@ -13,6 +13,7 @@ public abstract class ChessPiece {
     protected BufferedImage image;
 	private final GameScene.Faction faction;
 
+    public boolean isMoved = false;
     public ChessPiece(GameScene.Faction faction) {
         this.faction = faction;
     }

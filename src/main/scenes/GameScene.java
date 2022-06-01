@@ -18,7 +18,11 @@ public class GameScene extends Scene {
     private final Faction playerFaction;
     public Faction currentTurn;
 
+
+
     private List<Move> moves;
+    public Move lastPos;
+
 
     public GameScene(GameMode gameMode, Faction playerFaction) {
         this.gameMode = gameMode;
@@ -168,6 +172,8 @@ public class GameScene extends Scene {
 
     private void performMove(Move move) {
         ChessPiece piece = this.board.pos[move.pos.y][move.pos.x];
+        piece.isMoved = true;
+        this.lastPos = move;
         this.board.pos[move.pos.y][move.pos.x] = null;
         this.board.pos[move.dest.y][move.dest.x] = piece;
     }
