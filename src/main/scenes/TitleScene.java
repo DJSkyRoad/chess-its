@@ -6,7 +6,7 @@ import main.gui.Button;
 import java.awt.*;
 
 public class TitleScene extends Scene {
-    private GameScene.GameMode gameMode = GameScene.GameMode.PLAYERVSPLAYER;
+    private GameScene.GameMode gameMode = GameScene.GameMode.SCHIZOPHRENIC;
     private GameScene.Faction playerFaction = GameScene.Faction.WHITE;
 
     @Override

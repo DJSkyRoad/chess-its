@@ -11,6 +11,7 @@ public class Button {
     private int y;
     private int width;
     private int height;
+    private boolean hovering;
     private ClickEvent clickEvent;
 
     public Button(String title, int x, int y, int width, int height, ClickEvent clickEvent) {
@@ -31,8 +32,12 @@ public class Button {
                 && MathUtils.inRange(y, this.y - (this.height / 2), this.y + (this.height / 2));
     }
 
+    public void update(int mouseX, int mouseY) {
+        this.hovering = isColliding(mouseX, mouseY);
+    }
+
     public void draw(Graphics2D g2) {
-        g2.setColor(Color.GRAY);
+        g2.setColor(this.hovering ? Color.LIGHT_GRAY : Color.GRAY);
         g2.fillRect(this.x - (this.width / 2), this.y - (this.height / 2), this.width, this.height);
 
         g2.setColor(Color.WHITE);

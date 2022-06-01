@@ -34,7 +34,11 @@ public abstract class Scene {
         return this.height;
     }
 
-    public void onMouseHover(int x, int y) {}
+    public void onMouseHover(int x, int y) {
+        for (Button button : this.buttons) {
+            button.update(x, y);
+        }
+    }
 
     public void onMouseClick(int x, int y) {
         for (Button button : this.buttons) {
