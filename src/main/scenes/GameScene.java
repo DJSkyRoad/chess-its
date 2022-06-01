@@ -174,6 +174,7 @@ public class GameScene extends Scene {
         ChessPiece piece = this.board.pos[move.pos.y][move.pos.x];
         piece.isMoved = true;
         this.lastPos = move;
+        System.out.println(this.lastPos);
         this.board.pos[move.pos.y][move.pos.x] = null;
         this.board.pos[move.dest.y][move.dest.x] = piece;
     }
@@ -204,13 +205,13 @@ public class GameScene extends Scene {
     }
 
     public enum GameMode {
-        SCHIZOPHRENIC, PVC;
+        PLAYERVSPLAYER, PVC;
 
         @Override
         public String toString() {
             switch(this) {
                 default:
-                case SCHIZOPHRENIC: return "Schizophrenic";
+                case PLAYERVSPLAYER: return "2 Player Mode";
                 case PVC: return "Player vs. Computer";
             }
         }
