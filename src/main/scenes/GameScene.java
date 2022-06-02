@@ -19,6 +19,7 @@ public class GameScene extends Scene {
     public Faction currentTurn;
 
     private List<Move> moves;
+    private Move lastMove;
 
     public GameScene(GameMode gameMode, Faction playerFaction) {
         this.gameMode = gameMode;
@@ -178,6 +179,8 @@ public class GameScene extends Scene {
         ChessPiece piece = this.board.pos[move.pos.y][move.pos.x];
         this.board.pos[move.pos.y][move.pos.x] = null;
         this.board.pos[move.dest.y][move.dest.x] = piece;
+        piece.isMoved = true;
+        this.lastMove = move;
     }
 
     public enum Faction {
