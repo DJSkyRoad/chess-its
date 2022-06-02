@@ -87,7 +87,7 @@ public class GameScene extends Scene {
     private void onGameOver(boolean checked) {
         String title = checked ? "Checkmate" : "Patt";
         String subtitle = this.currentTurn+" won";
-        Game.INSTANCE.closeNetworkManager();
+        Game.INSTANCE.closeConnection();
         Game.INSTANCE.setScene(new GameOverScene(title, subtitle));
     }
 
@@ -209,13 +209,13 @@ public class GameScene extends Scene {
     }
 
     public enum GameMode {
-        OFFLINEPVP, PVC, PVPHOST, PVPGUEST;
+        PVP_OFFLINE, PVC, PVP_ONLINE;
 
         @Override
         public String toString() {
             switch(this) {
                 default:
-                case OFFLINEPVP: return "Offline PvP";
+                case PVP_OFFLINE: return "PvP Offline";
                 case PVC: return "PvC";
                 case PVPHOST: return "PvP Host";
                 case PVPGUEST: return "PvP Guest";
@@ -228,7 +228,8 @@ public class GameScene extends Scene {
 
         public GameMode next() {
             int i = this.ordinal()+1 < values().length ? this.ordinal()+1 : 0;
-            return values()[i];
+            GameMode next = values()[i];
+            return next.isOnline() ? next.next() : next;
         }
     }
 }

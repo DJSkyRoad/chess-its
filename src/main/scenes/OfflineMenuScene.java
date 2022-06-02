@@ -6,7 +6,7 @@ import main.gui.Button;
 import java.awt.*;
 
 public class OfflineMenuScene extends Scene {
-    private GameScene.GameMode gameMode = GameScene.GameMode.OFFLINEPVP;
+    private GameScene.GameMode gameMode = GameScene.GameMode.PVP_OFFLINE;
     private GameScene.Faction playerFaction = GameScene.Faction.WHITE;
 
     @Override

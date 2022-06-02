@@ -23,7 +23,7 @@ public class Game extends JPanel implements Runnable {
 
     private Thread gameThread;
 
-    private Connection networkManager;
+    private Connection connection;
 
     public Game() {
         INSTANCE = this;
@@ -36,20 +36,20 @@ public class Game extends JPanel implements Runnable {
     }
 
     public void startServer() {
-        this.networkManager = new Server(1234);
+        this.connection = new Server(1234);
     }
 
     public void startClient() {
-        this.networkManager = new Client("localhost", 1234);
+        this.connection = new Client("localhost", 1234);
     }
 
-    public Connection getNetworkManager() {
-        return this.networkManager;
+    public Connection getConnection() {
+        return this.connection;
     }
 
-    public void closeNetworkManager() {
-        this.networkManager.close();
-        this.networkManager = null;
+    public void closeConnection() {
+        this.connection.close();
+        this.connection = null;
     }
 
     public void setScene(Scene scene) {
