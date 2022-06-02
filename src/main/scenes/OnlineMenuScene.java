@@ -7,13 +7,34 @@ import main.networking.packet.SetPlayerFactionPacket;
 
 import java.awt.*;
 
-public class OnlineMenuScene extends Scene {
+public abstract class OnlineMenuScene extends Scene {
     protected GameScene.Faction playerFaction;
     private Connection connection;
-    protected Button factionButton;
+    private Button factionButton;
+    private boolean ready;
 
     public OnlineMenuScene() {
-        this.connection = Game.INSTANCE.getConnection();
+        this.connection = Game.INSTANCE.getConnection().get();
+    }
+
+    protected Connection getConnection() {
+        return this.connection;
+    }
+
+    protected boolean isReady() {
+        return this.ready;
+    }
+
+    public void setReady(boolean value) {
+        this.ready = value;
+    }
+
+    protected Button getFactionButton() {
+        return this.factionButton;
+    }
+
+    protected GameScene.Faction getPlayerFaction() {
+        return this.playerFaction;
     }
 
     public void setPlayerFaction(GameScene.Faction faction) {
@@ -24,8 +45,7 @@ public class OnlineMenuScene extends Scene {
     @Override
     public void init() {
         this.factionButton = new Button(this.playerFaction.toString(), Game.panelSize / 2, Game.panelSize / 2 + 100, 200, 50, (button) -> {
-            this.playerFaction = this.playerFaction.opposite();
-            button.setTitle(this.playerFaction.toString());
+            this.setPlayerFaction(this.playerFaction.opposite());
             this.connection.sendPacket(new SetPlayerFactionPacket(this.playerFaction.opposite()));
         });
         this.addButton(this.factionButton);
@@ -42,7 +62,6 @@ public class OnlineMenuScene extends Scene {
         Game.drawCenteredString(g2, "Online Game", Game.panelSize / 2, 100);
 
         g2.setFont(new Font("Helvetia", Font.PLAIN, 20));
-        Game.drawCenteredString(g2, this.connection.isConnected() ? "Connected" : "Connecting...", Game.panelSize / 2, 150);
         Game.drawCenteredString(g2, "Player Faction", Game.panelSize / 2, Game.panelSize / 2 + 60);
     }
 }

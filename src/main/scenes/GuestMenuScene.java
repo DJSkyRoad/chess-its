@@ -2,10 +2,10 @@ package main.scenes;
 
 import main.Game;
 import main.gui.Button;
+import main.networking.packet.SetReadyPacket;
 
 public class GuestMenuScene extends OnlineMenuScene {
     public GuestMenuScene() {
-        Game.INSTANCE.startClient();
         this.playerFaction = GameScene.Faction.BLACK;
     }
 
@@ -13,8 +13,10 @@ public class GuestMenuScene extends OnlineMenuScene {
     public void init() {
         super.init();
         this.addButton(new Button("Ready", Game.panelSize / 2, Game.panelSize / 2, 200, 50, (button) -> {
-            Game.INSTANCE.setScene(new GameScene(this.isHost ? GameScene.GameMode.PVPHOST : GameScene.GameMode.PVPGUEST, this.playerFaction));
+            this.setReady(!this.isReady());
+            button.setTitle(this.isReady() ? "Unready" : "Ready");
+            this.getConnection().sendPacket(new SetReadyPacket(this.isReady()));
         }));
-        this.factionButton.setActive(false);
+        this.getFactionButton().setActive(false);
     }
 }

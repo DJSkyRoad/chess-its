@@ -4,6 +4,7 @@ import main.gui.Board;
 import main.Game;
 import main.math.ChessPos;
 import main.math.Move;
+import main.networking.packet.MovePacket;
 import main.pieces.*;
 
 import java.awt.*;
@@ -26,9 +27,6 @@ public class GameScene extends Scene {
         this.playerFaction = playerFaction;
         this.currentTurn = Faction.WHITE;
 
-        if (gameMode == GameMode.PVPHOST) Game.INSTANCE.startServer();
-        else if (gameMode == GameMode.PVPGUEST) Game.INSTANCE.startClient();
-
         this.generateMoves(this.currentTurn);
 
         if (this.currentTurn != this.playerFaction && this.gameMode == GameMode.PVC) {
@@ -50,6 +48,7 @@ public class GameScene extends Scene {
 
     @Override
     public void onMouseHover(int x, int y) {
+        if (this.gameMode != GameMode.PVP_OFFLINE && this.currentTurn != this.playerFaction) return;
         ChessPos chessPos = new ChessPos(x / Game.tileSize - 1, y / Game.tileSize - 1);
         if (this.canSelect(chessPos)) this.board.hovered = chessPos;
         else this.board.hovered = new ChessPos(-1, -1);
@@ -57,17 +56,21 @@ public class GameScene extends Scene {
 
     @Override
     public void onMouseClick(int x, int y) {
+        if (this.gameMode != GameMode.PVP_OFFLINE && this.currentTurn != this.playerFaction) return;
         ChessPos chessPos = new ChessPos(x / Game.tileSize - 1, y / Game.tileSize - 1);
         if (this.board.selected.equals(chessPos)) this.board.selected = new ChessPos(-1, -1);
         else if (this.canMoveSelectedTo(chessPos)) {
-            this.performMove(new Move(this.board.selected, chessPos));
+            Move move = new Move(this.board.selected, chessPos);
+            this.performMove(move);
+            if (this.gameMode.isOnline()) Game.INSTANCE.getConnection().ifPresent((c) -> c.sendPacket(new MovePacket(move)));
             this.changeTurn();
         }
         else if (this.canSelect(chessPos)) this.board.selected = chessPos;
     }
 
-    private void changeTurn() {
+    public void changeTurn() {
         this.board.selected = new ChessPos(-1, -1);
+        this.board.hovered = new ChessPos(-1, -1);
 
         this.generateMoves(this.currentTurn);
         boolean checked = this.isChecked(this.moves, this.board.pos, this.currentTurn.opposite());
@@ -175,7 +178,7 @@ public class GameScene extends Scene {
         return false;
     }
 
-    private void performMove(Move move) {
+    public void performMove(Move move) {
         ChessPiece piece = this.board.pos[move.pos.y][move.pos.x];
         this.board.pos[move.pos.y][move.pos.x] = null;
         this.board.pos[move.dest.y][move.dest.x] = piece;
@@ -217,13 +220,12 @@ public class GameScene extends Scene {
                 default:
                 case PVP_OFFLINE: return "PvP Offline";
                 case PVC: return "PvC";
-                case PVPHOST: return "PvP Host";
-                case PVPGUEST: return "PvP Guest";
+                case PVP_ONLINE: return "PvP Online";
             }
         }
 
         public boolean isOnline() {
-            return this == PVPHOST || this == PVPGUEST;
+            return this == PVP_ONLINE;
         }
 
         public GameMode next() {

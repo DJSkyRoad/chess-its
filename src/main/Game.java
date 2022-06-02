@@ -8,6 +8,7 @@ import main.scenes.TitleScene;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Optional;
 
 public class Game extends JPanel implements Runnable {
     public static Game INSTANCE;
@@ -43,8 +44,8 @@ public class Game extends JPanel implements Runnable {
         this.connection = new Client("localhost", 1234);
     }
 
-    public Connection getConnection() {
-        return this.connection;
+    public Optional<Connection> getConnection() {
+        return Optional.ofNullable(this.connection);
     }
 
     public void closeConnection() {

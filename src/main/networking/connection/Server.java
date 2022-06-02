@@ -1,6 +1,6 @@
 package main.networking.connection;
 
-import main.networking.packet.Packet;
+import main.networking.packet.CompressedPacket;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -13,6 +13,7 @@ public class Server extends Connection {
 
     public Server(int port) {
         this.port = port;
+        this.start();
     }
 
     @Override
@@ -36,7 +37,7 @@ public class Server extends Connection {
     public void update() {
         try {
             Object packet = this.in.readObject();
-            if (packet instanceof Packet) this.handlePacket((Packet)packet);
+            if (packet instanceof CompressedPacket) this.handlePacket((CompressedPacket) packet);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

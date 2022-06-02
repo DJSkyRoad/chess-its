@@ -1,5 +1,6 @@
 package main.networking.connection;
 
+import main.networking.packet.CompressedPacket;
 import main.networking.packet.Packet;
 
 import java.io.IOException;
@@ -15,20 +16,21 @@ public abstract class Connection implements Runnable {
 
     protected boolean connected;
 
-    public Connection() {
+    public void start() {
         new Thread(this).start();
     }
 
     public void sendPacket(Packet packet) {
         try {
-            this.out.writeObject(packet);
+            CompressedPacket compressedPacket = new CompressedPacket(packet);
+            this.out.writeObject(compressedPacket);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    protected void handlePacket(Packet packet) {
-        packet.handle();
+    protected void handlePacket(CompressedPacket compressedPacket) {
+        compressedPacket.decompress().handle();
     }
 
     @Override

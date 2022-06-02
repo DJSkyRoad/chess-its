@@ -12,6 +12,15 @@ public class SetPlayerFactionPacket implements Packet {
         this.faction = faction;
     }
 
+    public static SetPlayerFactionPacket read(CompressedPacket c) {
+        return new SetPlayerFactionPacket(c.readEnum(GameScene.Faction.class));
+    }
+
+    @Override
+    public void write(CompressedPacket c) {
+        c.writeEnum(this.faction);
+    }
+
     @Override
     public void handle() {
         Scene scene = Game.INSTANCE.getScene();

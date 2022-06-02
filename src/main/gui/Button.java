@@ -54,4 +54,9 @@ public class Button {
     public void onClick() {
         if (this.active) this.clickEvent.onClick(this);
     }
+
+    @FunctionalInterface
+    public interface ClickEvent {
+        void onClick(Button button);
+    }
 }
