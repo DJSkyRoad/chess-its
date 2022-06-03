@@ -12,7 +12,7 @@ public class TitleScene extends Scene {
             Game.INSTANCE.startServer();
             Game.INSTANCE.setScene(new LoadingScene("Waiting for Opponent...", () -> {
                 Game.INSTANCE.getConnection().ifPresent((c) -> {
-                    if (c.isConnected()) Game.INSTANCE.setScene(new HostMenuScene());
+                    Game.INSTANCE.setScene(new HostMenuScene());
                 });
             }));
         }));
@@ -20,7 +20,7 @@ public class TitleScene extends Scene {
             Game.INSTANCE.startClient();
             Game.INSTANCE.setScene(new LoadingScene("Waiting for Opponent...", () -> {
                 Game.INSTANCE.getConnection().ifPresent((c) -> {
-                    if (c.isConnected()) Game.INSTANCE.setScene(new GuestMenuScene());
+                    Game.INSTANCE.setScene(new GuestMenuScene());
                 });
             }));
         }));

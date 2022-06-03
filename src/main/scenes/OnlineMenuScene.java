@@ -49,6 +49,10 @@ public abstract class OnlineMenuScene extends Scene {
             this.connection.sendPacket(new SetPlayerFactionPacket(this.playerFaction.opposite()));
         });
         this.addButton(this.factionButton);
+        this.addButton(new Button("Back", Game.panelSize / 2, Game.panelSize / 2 + 160, 200, 50, (button) -> {
+            Game.INSTANCE.setScene(new TitleScene());
+            Game.INSTANCE.closeConnection();
+        }));
     }
 
     @Override

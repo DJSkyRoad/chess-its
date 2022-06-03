@@ -1,4 +1,4 @@
-package main;
+package main.input;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;

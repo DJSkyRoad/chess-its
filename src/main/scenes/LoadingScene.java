@@ -1,6 +1,7 @@
 package main.scenes;
 
 import main.Game;
+import main.gui.Button;
 
 import java.awt.*;
 
@@ -11,6 +12,14 @@ public class LoadingScene extends Scene {
     public LoadingScene(String message, CloseFunction tryClose) {
         this.message = message;
         this.tryClose = tryClose;
+    }
+
+    @Override
+    public void init() {
+        this.addButton(new Button("Cancel", Game.panelSize / 2, Game.panelSize / 2 + 60, 200, 50, (button) -> {
+            Game.INSTANCE.setScene(new TitleScene());
+            Game.INSTANCE.closeConnection();
+        }));
     }
 
     @Override

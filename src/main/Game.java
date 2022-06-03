@@ -1,5 +1,6 @@
 package main;
 
+import main.input.MouseInput;
 import main.networking.connection.Client;
 import main.networking.connection.Connection;
 import main.networking.connection.Server;
@@ -45,7 +46,8 @@ public class Game extends JPanel implements Runnable {
     }
 
     public Optional<Connection> getConnection() {
-        return Optional.ofNullable(this.connection);
+        return this.connection == null || !this.connection.isConnected() ? Optional.empty()
+                : Optional.of(this.connection);
     }
 
     public void closeConnection() {
