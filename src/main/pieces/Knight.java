@@ -4,21 +4,12 @@ import main.math.ChessPos;
 import main.math.Move;
 import main.scenes.GameScene;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Knight extends ChessPiece {
     public Knight(GameScene.Faction faction) {
-        super(faction);
-        try {
-            this.image = ImageIO.read(Objects.requireNonNull(getClass()
-                    .getResourceAsStream(faction.isWhite() ? "/resources/white_knight.png" : "/resources/black_knight.png")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        super(faction, "knight");
     }
 
     @Override

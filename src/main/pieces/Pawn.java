@@ -5,21 +5,12 @@ import main.math.ChessPos;
 import main.math.Move;
 import main.scenes.GameScene;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Pawn extends ChessPiece {
     public Pawn(GameScene.Faction faction) {
-        super(faction);
-        try {
-            this.image = ImageIO.read(Objects.requireNonNull(getClass()
-                    .getResourceAsStream(faction.isWhite() ? "/resources/white_pawn.png" : "/resources/black_pawn.png")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        super(faction, "pawn");
     }
 
     @Override
