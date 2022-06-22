@@ -51,7 +51,7 @@ public class Game extends JPanel implements Runnable {
     }
 
     public void closeConnection() {
-        //this.connection.close();
+        this.connection.close();
         this.connection = null;
     }
 

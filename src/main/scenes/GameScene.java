@@ -90,7 +90,7 @@ public class GameScene extends Scene {
     private void onGameOver(boolean checked) {
         String title = checked ? "Checkmate" : "Patt";
         String subtitle = this.currentTurn+" won";
-        Game.INSTANCE.closeConnection();
+        Game.INSTANCE.getConnection().ifPresent(c -> Game.INSTANCE.closeConnection());
         Game.INSTANCE.setScene(new GameOverScene(title, subtitle));
     }
 
