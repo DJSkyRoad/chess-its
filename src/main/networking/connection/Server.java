@@ -47,12 +47,12 @@ public class Server extends Connection {
     public void close() {
         try {
             this.connected = false;
-
-            this.in.close();
-            this.out.close();
-
-            this.socket.close();
-            this.serverSocket.close();
+            if (this.in != null) {
+                this.in.close();
+                this.out.close();
+                this.socket.close();
+                this.serverSocket.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -5,18 +5,31 @@ import main.math.ChessPos;
 import main.math.Move;
 import main.scenes.GameScene;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class ChessPiece {
     protected BufferedImage image;
 	private final GameScene.Faction faction;
     public boolean isMoved;
 
-    public ChessPiece(GameScene.Faction faction) {
+    public ChessPiece(GameScene.Faction faction, String name) {
         this.faction = faction;
+
+        try {
+            String path = "/resources/" + (faction.isWhite() ? "white" : "black") + "_" + name + ".png";
+            InputStream inputStream = Objects.requireNonNull(getClass().getResourceAsStream(path));
+            this.image = ImageIO.read(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
     public abstract String toString();
     public abstract List<Move> getMoves(ChessPos pos, ChessPiece[][] board);
 
