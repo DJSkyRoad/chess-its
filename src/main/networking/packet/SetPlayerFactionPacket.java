@@ -2,7 +2,7 @@ package main.networking.packet;
 
 import main.Game;
 import main.scenes.GameScene;
-import main.scenes.OnlineMenuScene;
+import main.scenes.OnlineLobbyScene;
 import main.scenes.Scene;
 
 public class SetPlayerFactionPacket implements Packet {
@@ -24,8 +24,8 @@ public class SetPlayerFactionPacket implements Packet {
     @Override
     public void handle() {
         Scene scene = Game.INSTANCE.getScene();
-        if (scene instanceof OnlineMenuScene) {
-            ((OnlineMenuScene)scene).setPlayerFaction(this.faction);
+        if (scene instanceof OnlineLobbyScene) {
+            ((OnlineLobbyScene)scene).setPlayerFaction(this.faction);
         }
     }
 }

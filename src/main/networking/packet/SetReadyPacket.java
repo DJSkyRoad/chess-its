@@ -1,7 +1,7 @@
 package main.networking.packet;
 
 import main.Game;
-import main.scenes.OnlineMenuScene;
+import main.scenes.OnlineLobbyScene;
 import main.scenes.Scene;
 
 public class SetReadyPacket implements Packet {
@@ -23,8 +23,8 @@ public class SetReadyPacket implements Packet {
     @Override
     public void handle() {
         Scene scene = Game.INSTANCE.getScene();
-        if (scene instanceof OnlineMenuScene) {
-            ((OnlineMenuScene)scene).setReady(this.ready);
+        if (scene instanceof OnlineLobbyScene) {
+            ((OnlineLobbyScene)scene).setReady(this.ready);
         }
     }
 }

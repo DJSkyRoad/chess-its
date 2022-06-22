@@ -41,8 +41,8 @@ public class Game extends JPanel implements Runnable {
         this.setScene(new TitleScene());
     }
 
-    public void startServer() {
-        this.connection = new Server(1234);
+    public void startServer(int port) {
+        this.connection = new Server(port);
     }
 
     public void startClient(String ip, int port) {

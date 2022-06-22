@@ -7,13 +7,13 @@ import main.networking.packet.SetPlayerFactionPacket;
 
 import java.awt.*;
 
-public abstract class OnlineMenuScene extends Scene {
+public abstract class OnlineLobbyScene extends Scene {
     protected GameScene.Faction playerFaction;
     private Connection connection;
     private Button factionButton;
     private boolean ready;
 
-    public OnlineMenuScene() {
+    public OnlineLobbyScene() {
         this.connection = Game.INSTANCE.getConnection().get();
     }
 

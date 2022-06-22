@@ -55,7 +55,7 @@ public class TextField extends Widget {
     @Override
     public void draw(Graphics2D g2) {
         g2.setColor(this.hovering || this.active ? Color.LIGHT_GRAY : Color.GRAY);
-        g2.fillRect(this.x - (this.width / 2), this.y - (this.height / 2), this.width, this.height);
+        g2.drawRect(this.x - (this.width / 2), this.y - (this.height / 2), this.width, this.height);
 
         g2.setColor(Color.WHITE);
         g2.setFont(new Font("Helvetia", Font.PLAIN, 20));

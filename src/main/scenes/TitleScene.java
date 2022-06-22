@@ -9,12 +9,7 @@ public class TitleScene extends Scene {
     @Override
     public void init() {
         this.addWidget(new Button("Host Game", Game.panelSize / 2, Game.panelSize / 2, 200, 50, (button) -> {
-            Game.INSTANCE.startServer();
-            Game.INSTANCE.setScene(new LoadingScene("Waiting for Opponent...", () -> {
-                Game.INSTANCE.getConnection().ifPresent((c) -> {
-                    Game.INSTANCE.setScene(new HostMenuScene());
-                });
-            }));
+            Game.INSTANCE.setScene(new HostMenuScene());
         }));
         this.addWidget(new Button("Join Game", Game.panelSize / 2, Game.panelSize / 2 + 60, 200, 50, (button) -> {
             Game.INSTANCE.setScene(new JoinMenuScene());
