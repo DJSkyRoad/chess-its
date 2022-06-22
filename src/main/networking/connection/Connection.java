@@ -51,10 +51,10 @@ public abstract class Connection implements Runnable {
         try {
             this.connected = false;
 
-            this.in.close();
-            this.out.close();
+            if (this.in != null) this.in.close();
+            if (this.out != null) this.out.close();
 
-            this.socket.close();
+            if (this.socket != null) this.socket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
