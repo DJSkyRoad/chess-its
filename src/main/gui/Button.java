@@ -5,7 +5,7 @@ import main.math.MathUtils;
 
 import java.awt.*;
 
-public class Button {
+public class Button extends Widget {
     private String title;
     private int x;
     private int y;
@@ -33,15 +33,18 @@ public class Button {
         this.title = value;
     }
 
+    @Override
     public boolean isColliding(int x, int y) {
         return MathUtils.inRange(x, this.x - (this.width / 2), this.x + (this.width / 2))
                 && MathUtils.inRange(y, this.y - (this.height / 2), this.y + (this.height / 2));
     }
 
+    @Override
     public void update(int mouseX, int mouseY) {
         this.hovering = isColliding(mouseX, mouseY);
     }
 
+    @Override
     public void draw(Graphics2D g2) {
         g2.setColor(!this.active ? Color.DARK_GRAY : this.hovering ? Color.LIGHT_GRAY : Color.GRAY);
         g2.fillRect(this.x - (this.width / 2), this.y - (this.height / 2), this.width, this.height);
@@ -51,6 +54,7 @@ public class Button {
         Game.drawCenteredString(g2, this.title, this.x, this.y);
     }
 
+    @Override
     public void onClick() {
         if (this.active) this.clickEvent.onClick(this);
     }

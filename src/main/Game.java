@@ -1,5 +1,6 @@
 package main;
 
+import main.input.KeyInput;
 import main.input.MouseInput;
 import main.networking.connection.Client;
 import main.networking.connection.Connection;
@@ -19,6 +20,7 @@ public class Game extends JPanel implements Runnable {
     public static final int panelSize = tileSize * borderSize;
     private final int fps = 60;
     private final MouseInput mouseInput = new MouseInput();
+    public final KeyInput keyInput = new KeyInput();
     private final AudioPlayer audioPlayer = new AudioPlayer();
     public static double deltaTime;
     private double intervalTime;
@@ -43,8 +45,8 @@ public class Game extends JPanel implements Runnable {
         this.connection = new Server(1234);
     }
 
-    public void startClient() {
-        this.connection = new Client("localhost", 1234);
+    public void startClient(String ip, int port) {
+        this.connection = new Client(ip, port);
     }
 
     public Optional<Connection> getConnection() {
@@ -102,6 +104,10 @@ public class Game extends JPanel implements Runnable {
                 this.mouseInput.mouseClicked = false;
                 this.scene.onMouseClick(x, y);
             }
+        }
+        if (this.keyInput.keyPressed != null) {
+            this.scene.onKeyPressed(this.keyInput.keyPressed);
+            this.keyInput.keyPressed = null;
         }
         this.repaint();
     }

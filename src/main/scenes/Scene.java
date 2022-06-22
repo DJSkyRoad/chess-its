@@ -1,20 +1,22 @@
 package main.scenes;
 
 import main.gui.Button;
+import main.gui.Widget;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Scene {
     private int width;
     private int height;
-    private List<Button> buttons = new ArrayList<>();
+    private List<Widget> widgets = new ArrayList<>();
 
     public void init() {}
 
     public void draw(Graphics2D g2) {
-        for (Button button : this.buttons) button.draw(g2);
+        for (Widget widget : this.widgets) widget.draw(g2);
     }
 
     public void resize(int width, int height) {
@@ -22,8 +24,8 @@ public abstract class Scene {
         this.height = height;
     }
 
-    protected void addButton(Button button) {
-        this.buttons.add(button);
+    protected void addWidget(Widget widget) {
+        this.widgets.add(widget);
     }
 
     public int getWidth() {
@@ -35,14 +37,20 @@ public abstract class Scene {
     }
 
     public void onMouseHover(int x, int y) {
-        for (Button button : this.buttons) {
-            button.update(x, y);
+        for (Widget widget : this.widgets) {
+            widget.update(x, y);
         }
     }
 
     public void onMouseClick(int x, int y) {
-        for (Button button : this.buttons) {
-            if (button.isColliding(x, y)) button.onClick();
+        for (Widget widget : this.widgets) {
+            if (widget.isColliding(x, y)) widget.onClick();
+        }
+    }
+
+    public void onKeyPressed(KeyEvent event) {
+        for (Widget widget : this.widgets) {
+            widget.onKeyPressed(event);
         }
     }
 }

@@ -11,18 +11,18 @@ public class OfflineMenuScene extends Scene {
 
     @Override
     public void init() {
-        this.addButton(new Button("Start Game", Game.panelSize / 2, Game.panelSize / 2 - 60, 200, 50, (button) -> {
+        this.addWidget(new Button("Start Game", Game.panelSize / 2, Game.panelSize / 2 - 60, 200, 50, (button) -> {
             Game.INSTANCE.setScene(new GameScene(this.gameMode, this.playerFaction));
         }));
-        this.addButton(new Button(this.gameMode.toString(), Game.panelSize / 2, Game.panelSize / 2 + 40, 200, 50, (button) -> {
+        this.addWidget(new Button(this.gameMode.toString(), Game.panelSize / 2, Game.panelSize / 2 + 40, 200, 50, (button) -> {
             this.gameMode = this.gameMode.next();
             button.setTitle(this.gameMode.toString());
         }));
-        this.addButton(new Button(this.playerFaction.toString(), Game.panelSize / 2, Game.panelSize / 2 + 140, 200, 50, (button) -> {
+        this.addWidget(new Button(this.playerFaction.toString(), Game.panelSize / 2, Game.panelSize / 2 + 140, 200, 50, (button) -> {
             this.playerFaction = this.playerFaction.opposite();
             button.setTitle(this.playerFaction.toString());
         }));
-        this.addButton(new Button("Back", Game.panelSize / 2, Game.panelSize / 2 + 200, 200, 50, (button) -> {
+        this.addWidget(new Button("Back", Game.panelSize / 2, Game.panelSize / 2 + 200, 200, 50, (button) -> {
             Game.INSTANCE.setScene(new TitleScene());
         }));
     }

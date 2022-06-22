@@ -16,7 +16,7 @@ public class LoadingScene extends Scene {
 
     @Override
     public void init() {
-        this.addButton(new Button("Cancel", Game.panelSize / 2, Game.panelSize / 2 + 60, 200, 50, (button) -> {
+        this.addWidget(new Button("Cancel", Game.panelSize / 2, Game.panelSize / 2 + 60, 200, 50, (button) -> {
             Game.INSTANCE.setScene(new TitleScene());
             Game.INSTANCE.closeConnection();
         }));

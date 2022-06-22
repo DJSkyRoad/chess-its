@@ -22,7 +22,7 @@ public class HostMenuScene extends OnlineMenuScene {
             this.getConnection().sendPacket(new StartGamePacket(this.getPlayerFaction().opposite()));
         });
         this.startButton.setActive(this.isReady());
-        this.addButton(this.startButton);
+        this.addWidget(this.startButton);
     }
 
     @Override

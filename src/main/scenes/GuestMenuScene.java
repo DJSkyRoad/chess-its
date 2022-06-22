@@ -12,7 +12,7 @@ public class GuestMenuScene extends OnlineMenuScene {
     @Override
     public void init() {
         super.init();
-        this.addButton(new Button("Ready", Game.panelSize / 2, Game.panelSize / 2, 200, 50, (button) -> {
+        this.addWidget(new Button("Ready", Game.panelSize / 2, Game.panelSize / 2, 200, 50, (button) -> {
             this.setReady(!this.isReady());
             button.setTitle(this.isReady() ? "Unready" : "Ready");
             this.getConnection().sendPacket(new SetReadyPacket(this.isReady()));

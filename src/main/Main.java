@@ -23,6 +23,7 @@ public class Main {
 		window.setResizable(false);
 
     	Game panel = new Game();
+		window.addKeyListener(panel.keyInput);
 		window.add(panel);
 		window.pack();
 
