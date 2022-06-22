@@ -1,5 +1,6 @@
 package main.scenes;
 
+import main.AudioPlayer;
 import main.gui.Board;
 import main.Game;
 import main.math.ChessPos;
@@ -184,6 +185,7 @@ public class GameScene extends Scene {
         this.board.pos[move.dest.y][move.dest.x] = piece;
         piece.isMoved = true;
         this.lastMove = move;
+        Game.INSTANCE.playSound(AudioPlayer.PLACE_SOUND);
     }
 
     public enum Faction {

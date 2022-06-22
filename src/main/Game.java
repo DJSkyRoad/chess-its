@@ -9,6 +9,7 @@ import main.scenes.TitleScene;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 import java.util.Optional;
 
 public class Game extends JPanel implements Runnable {
@@ -18,6 +19,7 @@ public class Game extends JPanel implements Runnable {
     public static final int panelSize = tileSize * borderSize;
     private final int fps = 60;
     private final MouseInput mouseInput = new MouseInput();
+    private final AudioPlayer audioPlayer = new AudioPlayer();
     public static double deltaTime;
     private double intervalTime;
 
@@ -53,6 +55,11 @@ public class Game extends JPanel implements Runnable {
     public void closeConnection() {
         this.connection.close();
         this.connection = null;
+    }
+
+    public void playSound(URL url) {
+        this.audioPlayer.open(url);
+        this.audioPlayer.start();
     }
 
     public void setScene(Scene scene) {

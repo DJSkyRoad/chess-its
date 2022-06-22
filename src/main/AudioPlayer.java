@@ -4,20 +4,22 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.io.InputStream;
+import java.net.URL;
 
 public class AudioPlayer {
+    public static final URL PLACE_SOUND = Game.class.getResource("/resources/sounds/sound.wav");
 
-    public void play() {
-        new Thread(this::playAudio).start();
+    private Clip clip;
+
+    public void start() {
+        if (this.clip != null) this.clip.start();
     }
 
-    private void playAudio() {
+    public void open(URL url) {
         try {
-            Clip clip = AudioSystem.getClip();
-            InputStream resource = Game.class.getResourceAsStream("resources/sounds/" + "sound.wav");
-            AudioInputStream inputStream = AudioSystem.getAudioInputStream(resource);
-            clip.open(inputStream);
-            clip.start();
+            AudioInputStream inputStream = AudioSystem.getAudioInputStream(url);
+            this.clip = AudioSystem.getClip();
+            this.clip.open(inputStream);
         } catch (Exception e) {
             e.printStackTrace();
         }
