@@ -20,6 +20,8 @@ public class GameScene extends Scene {
     private final Faction playerFaction;
     public Faction currentTurn;
 
+    private boolean dontDeselect;
+
     private List<Move> moves;
     private Move lastMove;
 
@@ -49,29 +51,41 @@ public class GameScene extends Scene {
 
     @Override
     public void onMouseHover(int x, int y) {
+        this.board.update(x, y);
         if (this.gameMode != GameMode.PVP_OFFLINE && this.currentTurn != this.playerFaction) return;
         ChessPos chessPos = new ChessPos(x / Game.tileSize - 1, y / Game.tileSize - 1);
-        if (this.canSelect(chessPos)) this.board.hovered = chessPos;
+        if (this.canHover(chessPos)) this.board.hovered = chessPos;
         else this.board.hovered = new ChessPos(-1, -1);
     }
 
     @Override
-    public void onMouseClick(int x, int y) {
+    public void onMousePress(int x, int y) {
         if (this.gameMode != GameMode.PVP_OFFLINE && this.currentTurn != this.playerFaction) return;
         ChessPos chessPos = new ChessPos(x / Game.tileSize - 1, y / Game.tileSize - 1);
-        if (this.board.selected.equals(chessPos)) this.board.deselect();
-        else if (this.canMoveSelectedTo(chessPos)) {
+        if (this.canSelect(chessPos)) {
+            this.board.selected = chessPos;
+            this.dontDeselect = true;
+            this.board.selectedMoves.clear();
+            for (Move move : this.moves) {
+                if (move.pos.equals(chessPos)) this.board.selectedMoves.add(move.dest);
+            }
+        }
+        if (this.board.selected.equals(chessPos)) this.board.dragging = true;
+    }
+
+    @Override
+    public void onMouseRelease(int x, int y) {
+        if (this.gameMode != GameMode.PVP_OFFLINE && this.currentTurn != this.playerFaction) return;
+        ChessPos chessPos = new ChessPos(x / Game.tileSize - 1, y / Game.tileSize - 1);
+        if (this.board.selected.equals(chessPos) && !this.dontDeselect) this.board.deselect();
+        else if (this.board.selected.isValid() && this.canMoveSelectedTo(chessPos)) {
             Move move = new Move(this.board.selected, chessPos);
             this.performMove(move);
             if (this.gameMode.isOnline()) Game.INSTANCE.getConnection().ifPresent((c) -> c.sendPacket(new MovePacket(move)));
             this.changeTurn();
         }
-        else if (this.canSelect(chessPos)) {
-            this.board.selected = chessPos;
-            for (Move move : this.moves) {
-                if (move.pos.equals(chessPos)) this.board.selectedMoves.add(move.dest);
-            }
-        }
+        this.board.dragging = false;
+        this.dontDeselect = false;
     }
 
     public void changeTurn() {
@@ -175,6 +189,11 @@ public class GameScene extends Scene {
     }
 
     private boolean canSelect(ChessPos chessPos) {
+        return chessPos.isValid() && this.board.pos[chessPos.y][chessPos.x] != null
+                && this.board.pos[chessPos.y][chessPos.x].getFaction() == this.currentTurn;
+    }
+
+    private boolean canHover(ChessPos chessPos) {
         return chessPos.isValid() && ((this.board.pos[chessPos.y][chessPos.x] != null
                 && this.board.pos[chessPos.y][chessPos.x].getFaction() == this.currentTurn)
                 || (this.board.selected.isValid() && this.canMoveSelectedTo(chessPos)));

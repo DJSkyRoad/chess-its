@@ -104,6 +104,14 @@ public class Game extends JPanel implements Runnable {
                 this.mouseInput.mouseClicked = false;
                 this.scene.onMouseClick(x, y);
             }
+            else if (this.mouseInput.mousePressed) {
+                this.mouseInput.mousePressed = false;
+                this.scene.onMousePress(x, y);
+            }
+            else if (this.mouseInput.mouseReleased) {
+                this.mouseInput.mouseReleased = false;
+                this.scene.onMouseRelease(x, y);
+            }
         }
         if (this.keyInput.keyPressed != null) {
             this.scene.onKeyPressed(this.keyInput.keyPressed);

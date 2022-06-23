@@ -6,13 +6,10 @@ import main.math.Move;
 import main.pieces.*;
 import main.scenes.GameScene;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Board {
     public static final int scale = 8;
@@ -20,9 +17,9 @@ public class Board {
     private static final int pieceScale = (int)(0.6F * Game.tileSize);
     private static final int pieceOffset = tileOffset + Game.tileSize / 2;
 
-    private BufferedImage selectImg;
-    private float selectScale = 1.25F;
-    private float animSpeed = 0.015F;
+    private int mouseX;
+    private int mouseY;
+    public boolean dragging;
 
     public ChessPos hovered = new ChessPos(-1, -1);
     public ChessPos selected = new ChessPos(-1, -1);
@@ -41,18 +38,14 @@ public class Board {
             {new Rook(GameScene.Faction.WHITE), new Knight(GameScene.Faction.WHITE), new Bishop(GameScene.Faction.WHITE), new Queen(GameScene.Faction.WHITE), new King(GameScene.Faction.WHITE), new Bishop(GameScene.Faction.WHITE), new Knight(GameScene.Faction.WHITE), new Rook(GameScene.Faction.WHITE)}
     };
 
-    public Board() {
-        try {
-            this.selectImg = ImageIO.read(Objects.requireNonNull(getClass()
-                    .getResourceAsStream("/resources/select.png")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void deselect() {
         this.selected = new ChessPos(-1, -1);
         this.selectedMoves.clear();
+    }
+
+    public void update(int x, int y) {
+        this.mouseX = x;
+        this.mouseY = y;
     }
 
     public void draw(Graphics2D g2) {
@@ -86,9 +79,12 @@ public class Board {
 
         for (int x = 0; x < scale; x++) {
             for (int y = 0; y < scale; y++) {
-                if (this.pos[y][x] == null) continue;
+                if (this.pos[y][x] == null || (this.dragging && this.selected.equals(new ChessPos(x, y)))) continue;
                 this.drawCenteredImage(g2, this.pos[y][x].getImage(), x * Game.tileSize + pieceOffset, y * Game.tileSize + pieceOffset, pieceScale);
             }
+        }
+        if (this.selected.isValid() && this.dragging) {
+            this.drawCenteredImage(g2, this.pos[this.selected.y][this.selected.x].getImage(), this.mouseX, this.mouseY, pieceScale);
         }
     }
 

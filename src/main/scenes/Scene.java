@@ -48,6 +48,14 @@ public abstract class Scene {
         }
     }
 
+    public void onMousePress(int x, int y) {
+
+    }
+
+    public void onMouseRelease(int x, int y) {
+
+    }
+
     public void onKeyPressed(KeyEvent event) {
         for (Widget widget : this.widgets) {
             widget.onKeyPressed(event);
