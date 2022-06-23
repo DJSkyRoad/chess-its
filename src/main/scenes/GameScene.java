@@ -88,6 +88,10 @@ public class GameScene extends Scene {
 
         this.currentTurn = this.currentTurn.opposite();
 
+        if (this.currentTurn == this.playerFaction || this.gameMode == GameMode.PVP_OFFLINE) {
+            this.board.enemyMove = this.lastMove;
+        }
+
         if (this.currentTurn != this.playerFaction && this.gameMode == GameMode.PVC) {
             this.doAITurn();
         }

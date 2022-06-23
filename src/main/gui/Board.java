@@ -64,6 +64,7 @@ public class Board {
             }
         }
 
+        g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
         if (this.enemyMove != null) {
             g2.setColor(new Color(0xB4FF0000, true));
             g2.fillRect(this.enemyMove.pos.x * Game.tileSize + tileOffset, this.enemyMove.pos.y * Game.tileSize + tileOffset, Game.tileSize, Game.tileSize);
