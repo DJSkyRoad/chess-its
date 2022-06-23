@@ -59,18 +59,23 @@ public class GameScene extends Scene {
     public void onMouseClick(int x, int y) {
         if (this.gameMode != GameMode.PVP_OFFLINE && this.currentTurn != this.playerFaction) return;
         ChessPos chessPos = new ChessPos(x / Game.tileSize - 1, y / Game.tileSize - 1);
-        if (this.board.selected.equals(chessPos)) this.board.selected = new ChessPos(-1, -1);
+        if (this.board.selected.equals(chessPos)) this.board.deselect();
         else if (this.canMoveSelectedTo(chessPos)) {
             Move move = new Move(this.board.selected, chessPos);
             this.performMove(move);
             if (this.gameMode.isOnline()) Game.INSTANCE.getConnection().ifPresent((c) -> c.sendPacket(new MovePacket(move)));
             this.changeTurn();
         }
-        else if (this.canSelect(chessPos)) this.board.selected = chessPos;
+        else if (this.canSelect(chessPos)) {
+            this.board.selected = chessPos;
+            for (Move move : this.moves) {
+                if (move.pos.equals(chessPos)) this.board.selectedMoves.add(move.dest);
+            }
+        }
     }
 
     public void changeTurn() {
-        this.board.selected = new ChessPos(-1, -1);
+        this.board.deselect();
         this.board.hovered = new ChessPos(-1, -1);
 
         this.generateMoves(this.currentTurn);
