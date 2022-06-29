@@ -16,9 +16,11 @@ import java.util.Objects;
 public abstract class ChessPiece {
     protected BufferedImage image;
 	private final GameScene.Faction faction;
+    protected boolean neverMoved;
 
     public ChessPiece(GameScene.Faction faction, String name) {
         this.faction = faction;
+        this.neverMoved = true;
 
         try {
             String path = "/resources/" + (faction.isWhite() ? "white" : "black") + "_" + name + ".png";
@@ -29,7 +31,15 @@ public abstract class ChessPiece {
         }
     }
 
-    public void onMoved(GameScene scene, Move move) {}
+    public void setChecked(boolean value) {}
+
+    public boolean isChecked() {
+        return false;
+    }
+
+    public void onMoved(GameScene scene, Move move) {
+        this.neverMoved = false;
+    }
 
     public abstract String toString();
     public abstract List<Move> getMoves(ChessPos pos, ChessPiece[][] board);

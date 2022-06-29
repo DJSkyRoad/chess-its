@@ -22,7 +22,7 @@ public class GameScene extends Scene {
 
     private boolean dontDeselect;
 
-    private List<Move> moves;
+    private List<Move> currentMoves;
     private Move lastMove;
 
     public GameScene(GameMode gameMode, Faction playerFaction) {
@@ -66,7 +66,7 @@ public class GameScene extends Scene {
             this.board.selected = chessPos;
             this.dontDeselect = true;
             this.board.selectedMoves.clear();
-            for (Move move : this.moves) {
+            for (Move move : this.currentMoves) {
                 if (move.pos.equals(chessPos)) this.board.selectedMoves.add(move.dest);
             }
         }
@@ -88,14 +88,25 @@ public class GameScene extends Scene {
         this.dontDeselect = false;
     }
 
+    public ChessPiece getKing(Faction faction) {
+        for (int y = 0; y < Board.scale; y++) {
+            for (int x = 0; x < Board.scale; x++) {
+                ChessPiece piece = this.board.pos[y][x];
+                if (piece != null && piece.isKing() && piece.getFaction() == faction) return piece;
+            }
+        }
+        return null;
+    }
+
     public void changeTurn() {
         this.board.deselect();
         this.board.hovered = new ChessPos(-1, -1);
 
         this.generateMoves(this.currentTurn);
-        boolean checked = this.isChecked(this.moves, this.board.pos, this.currentTurn.opposite());
+        boolean checked = this.isChecked(this.currentMoves, this.board.pos, this.currentTurn.opposite());
+        this.getKing(this.currentTurn.opposite()).setChecked(checked);
         this.generateMoves(this.currentTurn.opposite());
-        if (this.moves.isEmpty()) {
+        if (this.currentMoves.isEmpty()) {
             this.onGameOver(checked);
             return;
         }
@@ -121,7 +132,7 @@ public class GameScene extends Scene {
     private void doAITurn() {
         List<Move> possibleMoves = new ArrayList<>();
         int priority = 0;
-        for (Move move : this.moves) {
+        for (Move move : this.currentMoves) {
             ChessPiece enemy = this.getPiece(move.dest);
             ChessPiece[][] postBoard = move.getTestPosCopy(this.board.pos);
             List<Move> postMoves = this.getLegalMoves(this.generateAllMoves(postBoard, this.currentTurn), this.currentTurn);
@@ -154,7 +165,7 @@ public class GameScene extends Scene {
     }
 
     private void generateMoves(Faction faction) {
-        this.moves = this.getLegalMoves(this.generateAllMoves(this.board.pos, faction), faction);
+        this.currentMoves = this.getLegalMoves(this.generateAllMoves(this.board.pos, faction), faction);
     }
 
     private List<Move> generateAllMoves(ChessPiece[][] pos, Faction faction) {
@@ -181,9 +192,11 @@ public class GameScene extends Scene {
     }
 
     private boolean isChecked(List<Move> moves, ChessPiece[][] board, Faction faction) {
-        for (Move postMove : moves) {
-            ChessPiece piece = board[postMove.dest.y][postMove.dest.x];
-            if (piece != null && piece.isKing() && piece.getFaction() == faction) return true;
+        for (Move move : moves) {
+            ChessPiece piece = board[move.dest.y][move.dest.x];
+            if (piece != null && piece.isKing() && piece.getFaction() == faction) {
+                return true;
+            }
         }
         return false;
     }
@@ -201,7 +214,7 @@ public class GameScene extends Scene {
 
     private boolean canMoveSelectedTo(ChessPos dest) {
         if (!this.board.selected.isValid() || !dest.isValid()) return false;
-        for (Move move : this.moves) {
+        for (Move move : this.currentMoves) {
             if (move.pos.equals(this.board.selected) && move.dest.equals(dest)) return true;
         }
         return false;
