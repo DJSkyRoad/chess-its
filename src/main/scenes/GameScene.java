@@ -211,9 +211,13 @@ public class GameScene extends Scene {
         ChessPiece piece = this.board.pos[move.pos.y][move.pos.x];
         this.board.pos[move.pos.y][move.pos.x] = null;
         this.board.pos[move.dest.y][move.dest.x] = piece;
-        piece.isMoved = true;
         this.lastMove = move;
         Game.INSTANCE.playSound(AudioPlayer.PLACE_SOUND);
+        piece.onMoved(this, move);
+    }
+
+    public void spawnPiece(ChessPiece piece, ChessPos pos) {
+        this.board.pos[pos.y][pos.x] = piece;
     }
 
     public enum Faction {
