@@ -11,6 +11,10 @@ public class Move {
         this.dest = dest;
     }
 
+    public ChessPos getDist() {
+        return this.pos.distanceTo(this.dest);
+    }
+
     public ChessPiece[][] getTestPosCopy(ChessPiece[][] original) {
         ChessPiece[][] test = new ChessPiece[original.length][original.length];
         for (int i = 0; i < original.length; i++) {

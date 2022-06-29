@@ -160,8 +160,12 @@ public class GameScene extends Scene {
         this.changeTurn();
     }
 
-    private ChessPiece getPiece(ChessPos chessPos) {
-        return this.board.pos[chessPos.x][chessPos.y];
+    public ChessPiece getPiece(ChessPos pos) {
+        return this.getPiece(pos.x, pos.y);
+    }
+
+    public ChessPiece getPiece(int x, int y) {
+        return this.board.pos[x][y];
     }
 
     private void generateMoves(Faction faction) {

@@ -11,6 +11,10 @@ public class ChessPos {
         this.y = y;
     }
 
+    public ChessPos distanceTo(ChessPos pos) {
+        return new ChessPos(pos.x - this.x, pos.y - this.y);
+    }
+
     public boolean equals(ChessPos pos) {
         return this.x == pos.x && this.y == pos.y;
     }

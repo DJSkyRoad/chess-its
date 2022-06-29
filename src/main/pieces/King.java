@@ -31,6 +31,23 @@ public class King extends ChessPiece {
     }
 
     @Override
+    public void onMoved(GameScene scene, Move move) {
+        super.onMoved(scene, move);
+
+        //Perform Rochade
+        ChessPos dist = move.getDist();
+        if (Math.abs(dist.x) == 2 && dist.y == 0) {
+            int x = dist.x == 2 ? Board.scale - 1 : 0;
+            int y = this.getFaction().isWhite() ? Board.scale - 1 : 0;
+            ChessPos pos = new ChessPos(x, y);
+            ChessPiece piece = scene.getPiece(pos);
+            if (piece != null
+                    && piece instanceof Rook
+                    && piece.getFaction() == this.getFaction()) scene.performMove(new Move(pos, pos.add(dist.x == 2 ? -2 : 3, 0)));
+        }
+    }
+
+    @Override
     public List<Move> getMoves(ChessPos pos, ChessPiece[][] board) {
         List<Move> moves = new ArrayList<>();
 
@@ -46,18 +63,9 @@ public class King extends ChessPiece {
 
         // Add Rochade Moves
         if (!this.checked && this.neverMoved) {
-            if (this.getFaction().isWhite()) {
-                ChessPiece rook = board[Board.scale - 1][Board.scale - 1];
-                if (rook != null && rook.neverMoved) addIfPossible(moves, pos, pos.add(2, 0), board);
-                rook = board[Board.scale - 1][0];
-                if (rook != null && rook.neverMoved) addIfPossible(moves, pos, pos.add(2, 0), board);
-            } else {
-                ChessPiece rook = board[Board.scale - 1][Board.scale - 1];
-                if (rook != null && rook.neverMoved) addIfPossible(moves, pos, pos.add(2, 0), board);
-            }
-
             for (int x = pos.x; x < Board.scale; x++) {
                 ChessPiece piece = board[pos.y][x];
+                System.out.println(this.getFaction()+" "+piece.getFaction());
                 if (piece != null
                 || (x == Board.scale - 1
                         && (piece == null || !(piece instanceof Rook) || !piece.neverMoved || piece.getFaction() != this.getFaction()))) break;
