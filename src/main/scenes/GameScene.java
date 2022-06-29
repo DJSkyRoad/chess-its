@@ -165,7 +165,7 @@ public class GameScene extends Scene {
     }
 
     public ChessPiece getPiece(int x, int y) {
-        return this.board.pos[x][y];
+        return this.board.pos[y][x];
     }
 
     private void generateMoves(Faction faction) {

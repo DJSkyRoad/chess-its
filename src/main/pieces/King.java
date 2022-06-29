@@ -34,16 +34,14 @@ public class King extends ChessPiece {
     public void onMoved(GameScene scene, Move move) {
         super.onMoved(scene, move);
 
-        //Perform Rochade
+        //Castle
         ChessPos dist = move.getDist();
         if (Math.abs(dist.x) == 2 && dist.y == 0) {
             int x = dist.x == 2 ? Board.scale - 1 : 0;
             int y = this.getFaction().isWhite() ? Board.scale - 1 : 0;
             ChessPos pos = new ChessPos(x, y);
             ChessPiece piece = scene.getPiece(pos);
-            if (piece != null
-                    && piece instanceof Rook
-                    && piece.getFaction() == this.getFaction()) scene.performMove(new Move(pos, pos.add(dist.x == 2 ? -2 : 3, 0)));
+            if (this.canCastleWith(piece)) scene.performMove(new Move(pos, pos.add(dist.x == 2 ? -2 : 3, 0)));
         }
     }
 
@@ -61,26 +59,25 @@ public class King extends ChessPiece {
         addIfPossible(moves, pos, pos.add(-1, 0), board);
         addIfPossible(moves, pos, pos.add(0, -1), board);
 
-        // Add Rochade Moves
+        // Add Castle Moves
         if (!this.checked && this.neverMoved) {
-            for (int x = pos.x; x < Board.scale; x++) {
+            for (int x = pos.x + 1; x < Board.scale; x++) {
                 ChessPiece piece = board[pos.y][x];
-                System.out.println(this.getFaction()+" "+piece.getFaction());
-                if (piece != null
-                || (x == Board.scale - 1
-                        && (piece == null || !(piece instanceof Rook) || !piece.neverMoved || piece.getFaction() != this.getFaction()))) break;
-                moves.add(new Move(pos, pos.add(2, 0)));
+                if ((x < Board.scale - 1 && piece != null) || (x == Board.scale - 1 && !this.canCastleWith(piece))) break;
+                addIfPossible(moves, pos, pos.add(2, 0), board);
             }
-            for (int x = pos.x; x >= 0; x--) {
+            for (int x = pos.x - 1; x >= 0; x--) {
                 ChessPiece piece = board[pos.y][x];
-                if (piece != null
-                        || (x == Board.scale - 1
-                        && (piece == null || !(piece instanceof Rook) || !piece.neverMoved || piece.getFaction() != this.getFaction()))) break;
-                moves.add(new Move(pos, pos.add(-2, 0)));
+                if ((x > 1 && piece != null) || (x == 0 && !this.canCastleWith(piece))) break;
+                addIfPossible(moves, pos, pos.add(-2, 0), board);
             }
         }
 
         return moves;
+    }
+
+    private boolean canCastleWith(ChessPiece piece) {
+        return piece != null && piece instanceof Rook && piece.neverMoved && piece.getFaction() == this.getFaction();
     }
 
     private void addIfPossible(List<Move> moves, ChessPos pos, ChessPos dest, ChessPiece[][] board) {
