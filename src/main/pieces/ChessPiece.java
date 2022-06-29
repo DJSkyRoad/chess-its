@@ -16,7 +16,6 @@ import java.util.Objects;
 public abstract class ChessPiece {
     protected BufferedImage image;
 	private final GameScene.Faction faction;
-    public boolean isMoved;
 
     public ChessPiece(GameScene.Faction faction, String name) {
         this.faction = faction;
@@ -29,6 +28,8 @@ public abstract class ChessPiece {
             e.printStackTrace();
         }
     }
+
+    public void onMoved(GameScene scene, Move move) {}
 
     public abstract String toString();
     public abstract List<Move> getMoves(ChessPos pos, ChessPiece[][] board);

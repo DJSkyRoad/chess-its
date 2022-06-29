@@ -19,6 +19,14 @@ public class Pawn extends ChessPiece {
     }
 
     @Override
+    public void onMoved(GameScene scene, Move move) {
+        if ((this.getFaction().isWhite() && move.dest.y == 0)
+        || (!this.getFaction().isWhite() && move.dest.y == Board.scale - 1)) {
+            scene.spawnPiece(new Queen(this.getFaction()), move.dest);
+        }
+    }
+
+    @Override
     public List<Move> getMoves(ChessPos pos, ChessPiece[][] board) {
         List<Move> moves = new ArrayList<>();
 
