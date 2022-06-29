@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Random;
 
 public class GameScene extends Scene {
-    private final Board board = new Board();
+    public final Board board = new Board();
     private final GameMode gameMode;
     private final Random random = new Random();
     private final Faction playerFaction;
@@ -23,7 +23,7 @@ public class GameScene extends Scene {
     private boolean dontDeselect;
 
     private List<Move> currentMoves;
-    private Move lastMove;
+    public Move lastMove;
 
     public GameScene(GameMode gameMode, Faction playerFaction) {
         this.gameMode = gameMode;
@@ -116,7 +116,6 @@ public class GameScene extends Scene {
         if (this.currentTurn == this.playerFaction || this.gameMode == GameMode.PVP_OFFLINE) {
             this.board.enemyMove = this.lastMove;
         }
-
         if (this.currentTurn != this.playerFaction && this.gameMode == GameMode.PVC) {
             this.doAITurn();
         }
@@ -226,14 +225,15 @@ public class GameScene extends Scene {
 
     public void performMove(Move move) {
         ChessPiece piece = this.board.pos[move.pos.y][move.pos.x];
+        piece.onMovedPre(this, move);
         this.board.pos[move.pos.y][move.pos.x] = null;
         this.board.pos[move.dest.y][move.dest.x] = piece;
         this.lastMove = move;
         Game.INSTANCE.playSound(AudioPlayer.PLACE_SOUND);
-        piece.onMoved(this, move);
+        piece.onMovedPost(this, move);
     }
 
-    public void spawnPiece(ChessPiece piece, ChessPos pos) {
+    public void setPiece(ChessPiece piece, ChessPos pos) {
         this.board.pos[pos.y][pos.x] = piece;
     }
 

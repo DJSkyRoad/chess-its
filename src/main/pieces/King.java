@@ -31,8 +31,8 @@ public class King extends ChessPiece {
     }
 
     @Override
-    public void onMoved(GameScene scene, Move move) {
-        super.onMoved(scene, move);
+    public void onMovedPost(GameScene scene, Move move) {
+        super.onMovedPost(scene, move);
 
         //Castle
         ChessPos dist = move.getDist();

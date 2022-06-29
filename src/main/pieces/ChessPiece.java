@@ -31,13 +31,18 @@ public abstract class ChessPiece {
         }
     }
 
+    public boolean isEnemy(ChessPiece enemy) {
+        return enemy != null && enemy.getFaction() != this.getFaction();
+    }
+
     public void setChecked(boolean value) {}
 
     public boolean isChecked() {
         return false;
     }
 
-    public void onMoved(GameScene scene, Move move) {
+    public void onMovedPre(GameScene scene, Move move) {}
+    public void onMovedPost(GameScene scene, Move move) {
         this.neverMoved = false;
     }
 
