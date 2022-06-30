@@ -26,6 +26,7 @@ public class Game extends JPanel implements Runnable {
     private double intervalTime;
 
     private Scene scene;
+    private Scene overlayScene;
 
     private Thread gameThread;
 
@@ -71,6 +72,15 @@ public class Game extends JPanel implements Runnable {
 
     public Scene getScene() {
         return this.scene;
+    }
+
+    public void setOverlayScene(Scene scene) {
+        this.overlayScene = scene;
+        this.overlayScene.resize(this.getWidth(), this.getHeight());
+    }
+
+    public Scene getOverlayScene() {
+        return this.overlayScene;
     }
 
     public void startGameThread() {

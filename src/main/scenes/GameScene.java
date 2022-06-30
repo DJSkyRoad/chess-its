@@ -37,6 +37,10 @@ public class GameScene extends Scene {
         if (this.board == null) this.board = new Board(this.getWidth() / 2, this.getHeight() / 2);
         else this.board.resize(this.getWidth() / 2, this.getHeight() / 2);
 
+        this.addWidget(new ImageButton("/resources/options.png", this.getWidth() - 50, 50, 50, 50, (button) -> {
+            Game.INSTANCE.setOverlayScene(new SettingsScene());
+        }));
+
         this.generateMoves(this.currentTurn);
 
         if (this.currentTurn != this.playerFaction && this.gameMode == GameMode.PVC) {
@@ -59,6 +63,7 @@ public class GameScene extends Scene {
 
     @Override
     public void onMouseHover(int x, int y) {
+        super.onMouseHover(x, y);
         this.board.update(x, y);
         if (this.gameMode != GameMode.PVP_OFFLINE && this.currentTurn != this.playerFaction) return;
         ChessPos chessPos = this.board.mouseToChessPos(x, y);
