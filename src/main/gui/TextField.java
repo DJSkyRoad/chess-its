@@ -8,19 +8,12 @@ import java.awt.event.KeyEvent;
 
 public class TextField extends Widget {
     protected String content;
-    private int x;
-    private int y;
-    private int width;
-    private int height;
     private boolean hovering;
     protected boolean active;
 
     public TextField(String content, int x, int y, int width, int height) {
+        super(x, y, width, height);
         this.content = content;
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
     }
 
     public String getContent() {

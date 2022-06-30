@@ -1,6 +1,5 @@
 package main.scenes;
 
-import main.gui.Button;
 import main.gui.Widget;
 
 import java.awt.*;
@@ -15,17 +14,27 @@ public abstract class Scene {
 
     public void init() {}
 
+    private List<Widget> getWidgets() {
+        return new ArrayList<>(this.widgets);
+    }
+
     public void draw(Graphics2D g2) {
-        for (Widget widget : this.widgets) widget.draw(g2);
+        for (Widget widget : this.getWidgets()) widget.draw(g2);
     }
 
     public void resize(int width, int height) {
         this.width = width;
         this.height = height;
+        this.clearWidgets();
+        this.init();
     }
 
     protected void addWidget(Widget widget) {
         this.widgets.add(widget);
+    }
+
+    protected void clearWidgets() {
+        this.widgets.clear();
     }
 
     public int getWidth() {
@@ -37,13 +46,13 @@ public abstract class Scene {
     }
 
     public void onMouseHover(int x, int y) {
-        for (Widget widget : this.widgets) {
+        for (Widget widget : this.getWidgets()) {
             widget.update(x, y);
         }
     }
 
     public void onMouseClick(int x, int y) {
-        for (Widget widget : this.widgets) {
+        for (Widget widget : this.getWidgets()) {
             if (widget.isColliding(x, y)) widget.onClick();
         }
     }
@@ -57,7 +66,7 @@ public abstract class Scene {
     }
 
     public void onKeyPressed(KeyEvent event) {
-        for (Widget widget : this.widgets) {
+        for (Widget widget : this.getWidgets()) {
             widget.onKeyPressed(event);
         }
     }

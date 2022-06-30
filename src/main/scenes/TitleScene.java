@@ -8,13 +8,13 @@ import java.awt.*;
 public class TitleScene extends Scene {
     @Override
     public void init() {
-        this.addWidget(new Button("Host Game", Game.panelSize / 2, Game.panelSize / 2, 200, 50, (button) -> {
+        this.addWidget(new Button("Host Game", this.getWidth() / 2, this.getHeight() / 2, 200, 50, (button) -> {
             Game.INSTANCE.setScene(new HostMenuScene());
         }));
-        this.addWidget(new Button("Join Game", Game.panelSize / 2, Game.panelSize / 2 + 60, 200, 50, (button) -> {
+        this.addWidget(new Button("Join Game", this.getWidth() / 2, this.getHeight() / 2 + 60, 200, 50, (button) -> {
             Game.INSTANCE.setScene(new JoinMenuScene());
         }));
-        this.addWidget(new Button("Play Offline", Game.panelSize / 2, Game.panelSize / 2 + 120, 200, 50, (button) -> {
+        this.addWidget(new Button("Play Offline", this.getWidth() / 2, this.getHeight() / 2 + 120, 200, 50, (button) -> {
             Game.INSTANCE.setScene(new OfflineMenuScene());
         }));
     }
@@ -27,6 +27,6 @@ public class TitleScene extends Scene {
 
         g2.setColor(Color.WHITE);
         g2.setFont(new Font("Helvetia", Font.BOLD, 100));
-        Game.drawCenteredString(g2, "Chess", Game.panelSize / 2, 100);
+        Game.drawCenteredString(g2, "Chess", this.getWidth() / 2, 100);
     }
 }

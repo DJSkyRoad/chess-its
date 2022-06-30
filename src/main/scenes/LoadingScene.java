@@ -16,7 +16,7 @@ public class LoadingScene extends Scene {
 
     @Override
     public void init() {
-        this.addWidget(new Button("Cancel", Game.panelSize / 2, Game.panelSize / 2 + 60, 200, 50, (button) -> {
+        this.addWidget(new Button("Cancel", this.getWidth() / 2, this.getHeight() / 2 + 60, 200, 50, (button) -> {
             Game.INSTANCE.setScene(new TitleScene());
             Game.INSTANCE.closeConnection();
         }));
@@ -30,7 +30,7 @@ public class LoadingScene extends Scene {
 
         g2.setColor(Color.WHITE);
         g2.setFont(new Font("Helvetia", Font.PLAIN, 20));
-        Game.drawCenteredString(g2, this.message, Game.panelSize / 2, Game.panelSize / 2);
+        Game.drawCenteredString(g2, this.message, this.getWidth() / 2, this.getHeight() / 2);
 
         this.tryClose.execute();
     }

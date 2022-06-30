@@ -12,7 +12,7 @@ public class GuestLobbyScene extends OnlineLobbyScene {
     @Override
     public void init() {
         super.init();
-        this.addWidget(new Button("Ready", Game.panelSize / 2, Game.panelSize / 2, 200, 50, (button) -> {
+        this.addWidget(new Button("Ready", this.getWidth() / 2, this.getHeight() / 2, 200, 50, (button) -> {
             this.setReady(!this.isReady());
             button.setTitle(this.isReady() ? "Unready" : "Ready");
             this.getConnection().sendPacket(new SetReadyPacket(this.isReady()));

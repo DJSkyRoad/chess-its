@@ -2,8 +2,10 @@ package main;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Objects;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,20 +15,19 @@ public class Main {
 
 		BufferedImage icon = null;
 		try {
-			icon = ImageIO.read(Main.class
-					.getResourceAsStream("/resources/black_king.png"));
+			icon = ImageIO.read(Objects.requireNonNull(Main.class
+					.getResourceAsStream("/resources/black_king.png")));
 			window.setIconImage(icon);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		window.setResizable(false);
 
     	Game panel = new Game();
 		window.addKeyListener(panel.keyInput);
 		window.add(panel);
 		window.pack();
 
+		window.setMinimumSize(new Dimension(Game.panelSize + 200, Game.panelSize + 200));
 		window.setLocationRelativeTo(null);
 		window.setVisible(true);
     	

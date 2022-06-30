@@ -6,21 +6,14 @@ import main.math.MathUtils;
 import java.awt.*;
 
 public class Button extends Widget {
-    private String title;
-    private int x;
-    private int y;
-    private int width;
-    private int height;
-    private boolean hovering;
-    private boolean active;
-    private ClickEvent clickEvent;
+    protected String title;
+    protected boolean hovering;
+    protected boolean active;
+    protected ClickEvent clickEvent;
 
     public Button(String title, int x, int y, int width, int height, ClickEvent clickEvent) {
+        super(x, y, width, height);
         this.title = title;
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
         this.clickEvent = clickEvent;
         this.active = true;
     }

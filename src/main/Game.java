@@ -66,7 +66,7 @@ public class Game extends JPanel implements Runnable {
 
     public void setScene(Scene scene) {
         this.scene = scene;
-        this.scene.init();
+        this.scene.resize(this.getWidth(), this.getHeight());
     }
 
     public Scene getScene() {
@@ -82,7 +82,8 @@ public class Game extends JPanel implements Runnable {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        this.scene.resize(this.getWidth(), this.getHeight());
+        if (this.scene.getWidth() != this.getWidth()
+        || this.scene.getHeight() != this.getHeight()) this.scene.resize(this.getWidth(), this.getHeight());
         this.scene.draw(g2);
     }
 

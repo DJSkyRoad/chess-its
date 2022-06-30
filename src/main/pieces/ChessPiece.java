@@ -21,7 +21,6 @@ public abstract class ChessPiece {
     public ChessPiece(GameScene.Faction faction, String name) {
         this.faction = faction;
         this.neverMoved = true;
-
         try {
             String path = "/resources/" + (faction.isWhite() ? "white" : "black") + "_" + name + ".png";
             InputStream inputStream = Objects.requireNonNull(getClass().getResourceAsStream(path));

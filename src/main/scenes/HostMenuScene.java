@@ -13,9 +13,13 @@ public class HostMenuScene extends Scene {
     @Override
     public void init() {
         super.init();
-        this.port = new NumericTextField(1234, Game.panelSize / 2, Game.panelSize / 2 + 40, 200, 50);
+        if (this.port == null) {
+            this.port = new NumericTextField(1234, this.getWidth() / 2, this.getHeight() / 2 + 40, 200, 50);
+        } else {
+            this.port.resize(this.getWidth() / 2, this.getHeight() / 2 + 40, 200, 50);
+        }
         this.addWidget(this.port);
-        this.addWidget(new Button("Host", Game.panelSize / 2, Game.panelSize / 2 + 100, 200, 50, (button) -> {
+        this.addWidget(new Button("Host", this.getWidth() / 2, this.getHeight() / 2 + 100, 200, 50, (button) -> {
             int p;
             try {
                 p = Integer.parseInt(this.port.getContent());
@@ -30,6 +34,9 @@ public class HostMenuScene extends Scene {
                 });
             }));
         }));
+        this.addWidget(new Button("Back", this.getWidth() / 2, this.getHeight() / 2 + 160, 200, 50, (button) -> {
+            Game.INSTANCE.setScene(new TitleScene());
+        }));
     }
 
     @Override
@@ -40,9 +47,9 @@ public class HostMenuScene extends Scene {
 
         g2.setColor(Color.WHITE);
         g2.setFont(new Font("Helvetia", Font.BOLD, 50));
-        Game.drawCenteredString(g2, "Join Online Game", Game.panelSize / 2, 100);
+        Game.drawCenteredString(g2, "Join Online Game", this.getWidth() / 2, 100);
 
         g2.setFont(new Font("Helvetia", Font.PLAIN, 20));
-        Game.drawCenteredString(g2, "Port", Game.panelSize / 2, Game.panelSize / 2);
+        Game.drawCenteredString(g2, "Port", this.getWidth() / 2, this.getHeight() / 2);
     }
 }

@@ -1,12 +1,13 @@
 package main.scenes;
 
 import main.AudioPlayer;
-import main.gui.Board;
 import main.Game;
+import main.gui.Board;
+import main.gui.ImageButton;
 import main.math.ChessPos;
 import main.math.Move;
 import main.networking.packet.MovePacket;
-import main.pieces.*;
+import main.pieces.ChessPiece;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 public class GameScene extends Scene {
-    public final Board board = new Board();
+    public Board board;
     private final GameMode gameMode;
     private final Random random = new Random();
     private final Faction playerFaction;
@@ -29,6 +30,12 @@ public class GameScene extends Scene {
         this.gameMode = gameMode;
         this.playerFaction = playerFaction;
         this.currentTurn = Faction.WHITE;
+    }
+
+    @Override
+    public void init() {
+        if (this.board == null) this.board = new Board(this.getWidth() / 2, this.getHeight() / 2);
+        else this.board.resize(this.getWidth() / 2, this.getHeight() / 2);
 
         this.generateMoves(this.currentTurn);
 
@@ -47,13 +54,14 @@ public class GameScene extends Scene {
         g2.setColor(Color.WHITE);
         g2.setFont(new Font("Helvetia", Font.BOLD, 30));
         Game.drawCenteredString(g2, this.currentTurn+"'s turn", this.getWidth() / 2, 30);
+        super.draw(g2);
     }
 
     @Override
     public void onMouseHover(int x, int y) {
         this.board.update(x, y);
         if (this.gameMode != GameMode.PVP_OFFLINE && this.currentTurn != this.playerFaction) return;
-        ChessPos chessPos = new ChessPos(x / Game.tileSize - 1, y / Game.tileSize - 1);
+        ChessPos chessPos = this.board.mouseToChessPos(x, y);
         if (this.canHover(chessPos)) this.board.hovered = chessPos;
         else this.board.hovered = new ChessPos(-1, -1);
     }
@@ -61,7 +69,7 @@ public class GameScene extends Scene {
     @Override
     public void onMousePress(int x, int y) {
         if (this.gameMode != GameMode.PVP_OFFLINE && this.currentTurn != this.playerFaction) return;
-        ChessPos chessPos = new ChessPos(x / Game.tileSize - 1, y / Game.tileSize - 1);
+        ChessPos chessPos = this.board.mouseToChessPos(x, y);
         if (this.canSelect(chessPos)) {
             this.board.selected = chessPos;
             this.dontDeselect = true;
@@ -76,7 +84,7 @@ public class GameScene extends Scene {
     @Override
     public void onMouseRelease(int x, int y) {
         if (this.gameMode != GameMode.PVP_OFFLINE && this.currentTurn != this.playerFaction) return;
-        ChessPos chessPos = new ChessPos(x / Game.tileSize - 1, y / Game.tileSize - 1);
+        ChessPos chessPos = this.board.mouseToChessPos(x, y);
         if (this.board.selected.equals(chessPos) && !this.dontDeselect) this.board.deselect();
         else if (this.board.selected.isValid() && this.canMoveSelectedTo(chessPos)) {
             Move move = new Move(this.board.selected, chessPos);
