@@ -23,7 +23,6 @@ public class Pawn extends ChessPiece {
     public void onMovedPre(GameScene scene, Move move) {
         super.onMovedPre(scene, move);
         ChessPos enemy = move.dest.add(0, this.getFaction().isWhite() ? 1 : -1);
-        System.out.println(enemy);
         ChessPos dist = move.getDist();
         if (this.isEnemy(scene.getPiece(enemy)) && Math.abs(dist.x) == 1 && Math.abs(dist.y) == 1) {
             scene.setPiece(null, enemy);
