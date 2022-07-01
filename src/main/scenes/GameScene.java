@@ -241,7 +241,7 @@ public class GameScene extends Scene {
         this.board.pos[move.pos.y][move.pos.x] = null;
         this.board.pos[move.dest.y][move.dest.x] = piece;
         this.lastMove = move;
-        Game.INSTANCE.playSound(AudioPlayer.PLACE_SOUND);
+        Game.INSTANCE.playSound(AudioPlayer.PLACE_PIECE);
         piece.onMovedPost(this, move);
     }
 

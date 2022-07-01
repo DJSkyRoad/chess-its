@@ -31,7 +31,7 @@ public abstract class Widget {
         this.height = height;
     }
 
-    protected static void drawCenteredImage(Graphics2D g2, BufferedImage image, int x, int y, int width, int height) {
-        g2.drawImage(image, x - width / 2, y - height / 2, width, height, null);
+    protected static void drawCenteredImage(Graphics g, BufferedImage image, int x, int y, int width, int height) {
+        g.drawImage(image, x - width / 2, y - height / 2, width, height, null);
     }
 }

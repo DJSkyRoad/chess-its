@@ -15,18 +15,18 @@ public class JoinMenuScene extends Scene {
     public void init() {
         super.init();
         if (this.ip == null) {
-            this.ip = new TextField("localhost", this.getWidth() / 2, this.getHeight() / 2 + 40, 200, 50);
+            this.ip = new TextField("localhost", this.getWidth() / 2, this.getHeight() / 2 - 20, 200, 50);
         } else {
-            this.ip.resize(this.getWidth() / 2, this.getHeight() / 2 + 40, 200, 50);
+            this.ip.resize(this.getWidth() / 2, this.getHeight() / 2 - 20, 200, 50);
         }
         if (this.port == null) {
-            this.port = new NumericTextField(1234, this.getWidth() / 2, this.getHeight() / 2 + 140, 200, 50);
+            this.port = new NumericTextField(1234, this.getWidth() / 2, this.getHeight() / 2 + 80, 200, 50);
         } else {
-            this.port.resize(this.getWidth() / 2, this.getHeight() / 2 + 140, 200, 50);
+            this.port.resize(this.getWidth() / 2, this.getHeight() / 2 + 80, 200, 50);
         }
         this.addWidget(this.ip);
         this.addWidget(this.port);
-        this.addWidget(new Button("Join", this.getWidth() / 2, this.getHeight() / 2 + 200, 200, 50, (button) -> {
+        this.addWidget(new Button("Join", this.getWidth() / 2, this.getHeight() / 2 + 140, 200, 50, (button) -> {
             int p;
             try {
                 p = Integer.parseInt(this.port.getContent());
@@ -56,7 +56,7 @@ public class JoinMenuScene extends Scene {
         Game.drawCenteredString(g2, "Join Online Game", this.getWidth() / 2, 100);
 
         g2.setFont(new Font("Helvetia", Font.PLAIN, 20));
-        Game.drawCenteredString(g2, "IP", this.getWidth() / 2, this.getHeight() / 2);
-        Game.drawCenteredString(g2, "Port", this.getWidth() / 2, this.getHeight() / 2 + 100);
+        Game.drawCenteredString(g2, "IP", this.getWidth() / 2, this.getHeight() / 2 - 60);
+        Game.drawCenteredString(g2, "Port", this.getWidth() / 2, this.getHeight() / 2 + 40);
     }
 }

@@ -7,7 +7,6 @@ import main.pieces.*;
 import main.scenes.GameScene;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,7 +84,7 @@ public class Board {
 
         g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
         if (this.enemyMove != null) {
-            g2.setColor(new Color(0xB4FF0000, true));
+            g2.setColor(new Color(0x8CFF0000, true));
             g2.fillRect(this.enemyMove.pos.x * Game.tileSize + this.xOffset, this.enemyMove.pos.y * Game.tileSize + this.yOffset, Game.tileSize, Game.tileSize);
             g2.fillRect(this.enemyMove.dest.x * Game.tileSize + this.xOffset, this.enemyMove.dest.y * Game.tileSize + this.yOffset, Game.tileSize, Game.tileSize);
         }

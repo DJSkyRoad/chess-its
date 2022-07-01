@@ -3,11 +3,11 @@ package main;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import java.io.InputStream;
 import java.net.URL;
 
 public class AudioPlayer {
-    public static final URL PLACE_SOUND = Game.class.getResource("/resources/sounds/sound.wav");
+    public static final URL PLACE_PIECE = Game.class.getResource("/resources/sounds/place_piece.wav");
+    public static final URL BUTTON_CLICK = Game.class.getResource("/resources/sounds/button_click.wav");
 
     private Clip clip;
 
