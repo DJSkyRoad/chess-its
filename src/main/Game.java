@@ -76,11 +76,11 @@ public class Game extends JPanel implements Runnable {
 
     public void setOverlayScene(Scene scene) {
         this.overlayScene = scene;
-        this.overlayScene.resize(this.getWidth(), this.getHeight());
+        this.getOverlayScene().ifPresent((s) -> s.resize(this.getWidth(), this.getHeight()));
     }
 
-    public Scene getOverlayScene() {
-        return this.overlayScene;
+    public Optional<Scene> getOverlayScene() {
+        return Optional.ofNullable(this.overlayScene);
     }
 
     public void startGameThread() {
@@ -95,6 +95,7 @@ public class Game extends JPanel implements Runnable {
         if (this.scene.getWidth() != this.getWidth()
         || this.scene.getHeight() != this.getHeight()) this.scene.resize(this.getWidth(), this.getHeight());
         this.scene.draw(g2);
+        this.getOverlayScene().ifPresent((scene) -> scene.draw(g2));
     }
 
     public static void drawCenteredString(Graphics2D g2, String text, int x, int y) {
@@ -106,26 +107,27 @@ public class Game extends JPanel implements Runnable {
 
     public void update() {
         Point pos = this.getMousePosition();
+        Scene currentScene = this.getOverlayScene().orElse(this.getScene());
         if (pos != null) {
             int x = pos.x;
             int y = pos.y;
-            this.scene.onMouseHover(x, y);
+            currentScene.onMouseHover(x, y);
 
             if (this.mouseInput.mouseClicked) {
                 this.mouseInput.mouseClicked = false;
-                this.scene.onMouseClick(x, y);
+                currentScene.onMouseClick(x, y);
             }
             else if (this.mouseInput.mousePressed) {
                 this.mouseInput.mousePressed = false;
-                this.scene.onMousePress(x, y);
+                currentScene.onMousePress(x, y);
             }
             else if (this.mouseInput.mouseReleased) {
                 this.mouseInput.mouseReleased = false;
-                this.scene.onMouseRelease(x, y);
+                currentScene.onMouseRelease(x, y);
             }
         }
         if (this.keyInput.keyPressed != null) {
-            this.scene.onKeyPressed(this.keyInput.keyPressed);
+            currentScene.onKeyPressed(this.keyInput.keyPressed);
             this.keyInput.keyPressed = null;
         }
         this.repaint();

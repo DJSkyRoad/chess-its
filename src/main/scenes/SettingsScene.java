@@ -10,8 +10,12 @@ public class SettingsScene extends Scene {
     @Override
     public void init() {
         super.init();
-        this.addWidget(new Button("Quit", this.getWidth() / 2, this.getHeight() / 2 + 40, 200, 50, (button) -> {
+        this.addWidget(new Button("Back", this.getWidth() / 2, this.getHeight() / 2, 200, 50, (button) -> {
+            Game.INSTANCE.setOverlayScene(null);
+        }));
+        this.addWidget(new Button("Quit to Title", this.getWidth() / 2, this.getHeight() / 2 + 60, 200, 50, (button) -> {
             Game.INSTANCE.setScene(new TitleScene());
+            Game.INSTANCE.setOverlayScene(null);
         }));
     }
 
