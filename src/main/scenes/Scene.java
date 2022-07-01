@@ -70,4 +70,9 @@ public abstract class Scene {
             widget.onKeyPressed(event);
         }
     }
+
+    protected void drawBackground(Graphics2D g2) {
+        g2.setColor(new Color(0x414141));
+        g2.fillRect(0, 0, this.getWidth(), this.getHeight());
+    }
 }

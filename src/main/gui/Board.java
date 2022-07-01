@@ -77,8 +77,8 @@ public class Board {
 
         for (int x = 0; x < scale; x++) {
             for (int y = 0; y < scale; y++) {
-                if ((x % 2 == 0 && y % 2 == 0) || (x % 2 != 0 && y % 2 != 0)) g2.setColor(new Color(0xededed));
-                else g2.setColor(new Color(0x1f1f1f));
+                if ((x % 2 == 0 && y % 2 == 0) || (x % 2 != 0 && y % 2 != 0)) g2.setColor(new Color(0xCC782D));
+                else g2.setColor(new Color(0x944F0B));
                 g2.fillRect(x * Game.tileSize + this.xOffset, y * Game.tileSize + this.yOffset, Game.tileSize, Game.tileSize);
             }
         }

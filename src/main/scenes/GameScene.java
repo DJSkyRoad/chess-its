@@ -50,8 +50,7 @@ public class GameScene extends Scene {
 
     @Override
     public void draw(Graphics2D g2) {
-        g2.setColor(Color.BLACK);
-        g2.fillRect(0, 0, this.getWidth(), this.getHeight());
+        this.drawBackground(g2);
 
         this.board.draw(g2);
 
