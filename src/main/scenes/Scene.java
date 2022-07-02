@@ -84,6 +84,7 @@ public abstract class Scene {
         FontMetrics metrics = g2.getFontMetrics(g2.getFont());
         x = x - metrics.stringWidth(text) / 2;
         y = y - (metrics.getHeight() / 2) + metrics.getAscent();
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g2.drawString(text, x, y);
     }
 }
