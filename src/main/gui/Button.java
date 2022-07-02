@@ -17,8 +17,8 @@ public class Button extends Widget {
     protected boolean hovering;
     protected boolean active;
     protected ClickEvent clickEvent;
-    protected BufferedImage image;
-    protected BufferedImage pressedImage;
+    private BufferedImage image;
+    private BufferedImage pressedImage;
     protected boolean pressed;
 
     public Button(String title, int x, int y, int width, int height, ClickEvent clickEvent) {
@@ -71,6 +71,7 @@ public class Button extends Widget {
         if (this.active && this.hovering) {
             Game.INSTANCE.playSound(AudioPlayer.BUTTON_CLICK);
             this.clickEvent.onClick(this);
+            this.pressed = false;
         }
     }
 

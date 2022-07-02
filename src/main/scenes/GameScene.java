@@ -72,6 +72,7 @@ public class GameScene extends Scene {
 
     @Override
     public void onMousePress(int x, int y) {
+        super.onMousePress(x, y);
         if (this.gameMode != GameMode.PVP_OFFLINE && this.currentTurn != this.playerFaction) return;
         ChessPos chessPos = this.board.mouseToChessPos(x, y);
         if (this.canSelect(chessPos)) {
@@ -87,6 +88,7 @@ public class GameScene extends Scene {
 
     @Override
     public void onMouseRelease(int x, int y) {
+        super.onMouseRelease(x, y);
         if (this.gameMode != GameMode.PVP_OFFLINE && this.currentTurn != this.playerFaction) return;
         ChessPos chessPos = this.board.mouseToChessPos(x, y);
         if (this.board.selected.equals(chessPos) && !this.dontDeselect) this.board.deselect();
