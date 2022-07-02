@@ -61,10 +61,10 @@ public abstract class OnlineLobbyScene extends Scene {
         super.draw(g2);
 
         g2.setColor(Color.WHITE);
-        g2.setFont(new Font("Helvetia", Font.BOLD, 50));
-        Game.drawCenteredString(g2, "Online Game", this.getWidth() / 2, 100);
+        g2.setFont(Game.INSTANCE.font.deriveFont(Font.BOLD, 50));
+        drawCenteredString(g2, "Online Game", this.getWidth() / 2, 100);
 
-        g2.setFont(new Font("Helvetia", Font.PLAIN, 20));
-        Game.drawCenteredString(g2, "Player Faction", this.getWidth() / 2, this.getHeight() / 2 + 60);
+        g2.setFont(Game.INSTANCE.font.deriveFont(Font.PLAIN, 20));
+        drawCenteredString(g2, "Player Faction", this.getWidth() / 2, this.getHeight() / 2 + 60);
     }
 }

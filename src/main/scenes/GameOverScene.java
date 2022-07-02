@@ -27,8 +27,8 @@ public class GameOverScene extends Scene {
         super.draw(g2);
 
         g2.setColor(Color.WHITE);
-        g2.setFont(new Font("Helvetia", Font.BOLD, 50));
-        Game.drawCenteredString(g2, this.titleMessage, this.getWidth() / 2, 100);
-        Game.drawCenteredString(g2, this.subtitle, this.getWidth() / 2, 200);
+        g2.setFont(Game.INSTANCE.font.deriveFont(Font.BOLD, 50));
+        drawCenteredString(g2, this.titleMessage, this.getWidth() / 2, 100);
+        drawCenteredString(g2, this.subtitle, this.getWidth() / 2, 200);
     }
 }

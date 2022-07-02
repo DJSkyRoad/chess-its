@@ -25,7 +25,7 @@ public class SettingsScene extends Scene {
         super.draw(g2);
 
         g2.setColor(Color.WHITE);
-        g2.setFont(new Font("Helvetia", Font.BOLD, 50));
-        Game.drawCenteredString(g2, "Settings", this.getWidth() / 2, 100);
+        g2.setFont(Game.INSTANCE.font.deriveFont(Font.BOLD, 50));
+        drawCenteredString(g2, "Settings", this.getWidth() / 2, 100);
     }
 }

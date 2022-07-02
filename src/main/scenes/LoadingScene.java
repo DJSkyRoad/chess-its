@@ -28,8 +28,8 @@ public class LoadingScene extends Scene {
         super.draw(g2);
 
         g2.setColor(Color.WHITE);
-        g2.setFont(new Font("Helvetia", Font.PLAIN, 20));
-        Game.drawCenteredString(g2, this.message, this.getWidth() / 2, this.getHeight() / 2);
+        g2.setFont(Game.INSTANCE.font.deriveFont(Font.PLAIN, 20));
+        drawCenteredString(g2, this.message, this.getWidth() / 2, this.getHeight() / 2);
 
         this.tryClose.execute();
     }

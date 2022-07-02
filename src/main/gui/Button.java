@@ -3,6 +3,7 @@ package main.gui;
 import main.AudioPlayer;
 import main.Game;
 import main.math.MathUtils;
+import main.scenes.Scene;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -17,6 +18,8 @@ public class Button extends Widget {
     protected boolean active;
     protected ClickEvent clickEvent;
     protected BufferedImage image;
+    protected BufferedImage pressedImage;
+    protected boolean pressed;
 
     public Button(String title, int x, int y, int width, int height, ClickEvent clickEvent) {
         super(x, y, width, height);
@@ -26,23 +29,11 @@ public class Button extends Widget {
         try {
             InputStream inputStream = Objects.requireNonNull(getClass().getResourceAsStream("/resources/button.png"));
             this.image = ImageIO.read(inputStream);
+            inputStream = Objects.requireNonNull(getClass().getResourceAsStream("/resources/button_pressed.png"));
+            this.pressedImage = ImageIO.read(inputStream);
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public BufferedImage tintImage(BufferedImage image, Color color) {
-        BufferedImage tintedImage = new BufferedImage(
-                image.getWidth(),
-                image.getHeight(),
-                BufferedImage.TRANSLUCENT);
-
-        Graphics graphics = tintedImage.createGraphics();
-        Color newColor = new Color(color.getRed(), color.getBlue(), color.getGreen(), 0);
-        graphics.setXORMode(newColor);
-        graphics.drawImage(tintedImage, 0, 0, null);
-        graphics.dispose();
-        return tintedImage;
     }
 
     public void setActive(boolean value) {
@@ -61,18 +52,18 @@ public class Button extends Widget {
 
     @Override
     public void update(int mouseX, int mouseY) {
-        this.hovering = isColliding(mouseX, mouseY);
+        this.hovering = this.isColliding(mouseX, mouseY);
     }
 
     @Override
     public void draw(Graphics2D g2) {
-        g2.setXORMode(!this.active ? Color.DARK_GRAY : this.hovering ? new Color(133, 78, 8) : new Color(143, 88, 0));
-        Widget.drawCenteredImage(g2, this.image, this.x, this.y, this.width, this.height);
+        g2.setXORMode(!this.active ? new Color(129, 129, 129) : this.hovering ? new Color(133, 78, 8) : new Color(143, 88, 0));
+        Widget.drawCenteredImage(g2, this.pressed ? this.pressedImage : this.image, this.x, this.y, this.width, this.height);
         g2.setPaintMode();
 
         g2.setColor(this.active ? Color.WHITE : Color.GRAY);
-        g2.setFont(new Font("Helvetia", Font.PLAIN, 20));
-        Game.drawCenteredString(g2, this.title, this.x, this.y);
+        g2.setFont(Game.INSTANCE.font.deriveFont(Font.PLAIN, 20));
+        Scene.drawCenteredString(g2, this.title, this.x, this.y);
     }
 
     @Override
@@ -81,6 +72,16 @@ public class Button extends Widget {
             Game.INSTANCE.playSound(AudioPlayer.BUTTON_CLICK);
             this.clickEvent.onClick(this);
         }
+    }
+
+    @Override
+    public void onMouseDown() {
+        if (this.active) this.pressed = true;
+    }
+
+    @Override
+    public void onMouseUp() {
+        this.pressed = false;
     }
 
     @FunctionalInterface

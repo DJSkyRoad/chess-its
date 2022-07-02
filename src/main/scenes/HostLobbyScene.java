@@ -31,7 +31,7 @@ public class HostLobbyScene extends OnlineLobbyScene {
 
         super.draw(g2);
 
-        g2.setFont(new Font("Helvetia", Font.PLAIN, 20));
-        Game.drawCenteredString(g2, this.isReady() ? "Ready" : "Waiting for Opponent...", this.getWidth() / 2, 150);
+        g2.setFont(Game.INSTANCE.font.deriveFont(Font.PLAIN, 20));
+        drawCenteredString(g2, this.isReady() ? "Ready" : "Waiting for Opponent...", this.getWidth() / 2, 150);
     }
 }

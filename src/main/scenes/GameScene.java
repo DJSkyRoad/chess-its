@@ -55,8 +55,8 @@ public class GameScene extends Scene {
         this.board.draw(g2);
 
         g2.setColor(Color.WHITE);
-        g2.setFont(new Font("Helvetia", Font.BOLD, 30));
-        Game.drawCenteredString(g2, this.currentTurn+"'s turn", this.getWidth() / 2, 30);
+        g2.setFont(Game.INSTANCE.font.deriveFont(Font.BOLD, 30));
+        this.drawCenteredString(g2, this.currentTurn+"'s turn", this.getWidth() / 2, 30);
         super.draw(g2);
     }
 

@@ -25,7 +25,7 @@ public class TitleScene extends Scene {
         super.draw(g2);
 
         g2.setColor(Color.WHITE);
-        g2.setFont(new Font("Helvetia", Font.BOLD, 100));
-        Game.drawCenteredString(g2, "Chess", this.getWidth() / 2, 100);
+        g2.setFont(Game.INSTANCE.font.deriveFont(Font.BOLD, 100));
+        drawCenteredString(g2, "Chess", this.getWidth() / 2, 100);
     }
 }

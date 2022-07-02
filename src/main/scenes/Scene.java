@@ -58,11 +58,15 @@ public abstract class Scene {
     }
 
     public void onMousePress(int x, int y) {
-
+        for (Widget widget : this.getWidgets()) {
+            if (widget.isColliding(x, y)) widget.onMouseDown();
+        }
     }
 
     public void onMouseRelease(int x, int y) {
-
+        for (Widget widget : this.getWidgets()) {
+            widget.onMouseUp();
+        }
     }
 
     public void onKeyPressed(KeyEvent event) {
@@ -74,5 +78,12 @@ public abstract class Scene {
     protected void drawBackground(Graphics2D g2) {
         g2.setColor(new Color(0x414141));
         g2.fillRect(0, 0, this.getWidth(), this.getHeight());
+    }
+
+    public static void drawCenteredString(Graphics2D g2, String text, int x, int y) {
+        FontMetrics metrics = g2.getFontMetrics(g2.getFont());
+        x = x - metrics.stringWidth(text) / 2;
+        y = y - (metrics.getHeight() / 2) + metrics.getAscent();
+        g2.drawString(text, x, y);
     }
 }

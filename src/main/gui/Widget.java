@@ -22,6 +22,8 @@ public abstract class Widget {
     public abstract void update(int x, int y);
     public abstract boolean isColliding(int x, int y);
     public abstract void onClick();
+    public abstract void onMouseDown();
+    public abstract void onMouseUp();
     public void onKeyPressed(KeyEvent event) {}
 
     public void resize(int x, int y, int width, int height) {

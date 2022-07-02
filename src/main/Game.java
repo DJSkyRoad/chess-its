@@ -10,6 +10,8 @@ import main.scenes.TitleScene;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Optional;
 
@@ -32,12 +34,23 @@ public class Game extends JPanel implements Runnable {
 
     private Connection connection;
 
+    public Font font;
+
     public Game() {
         INSTANCE = this;
         this.setPreferredSize(new Dimension(panelSize, panelSize));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.addMouseListener(this.mouseInput);
+
+        InputStream inputStream = getClass().getResourceAsStream("/resources/font/TitanOne-Regular.ttf");
+        try {
+            this.font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+        } catch (FontFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         this.setScene(new TitleScene());
     }
@@ -96,13 +109,6 @@ public class Game extends JPanel implements Runnable {
         || this.scene.getHeight() != this.getHeight()) this.scene.resize(this.getWidth(), this.getHeight());
         this.scene.draw(g2);
         this.getOverlayScene().ifPresent((scene) -> scene.draw(g2));
-    }
-
-    public static void drawCenteredString(Graphics2D g2, String text, int x, int y) {
-        FontMetrics metrics = g2.getFontMetrics(g2.getFont());
-        x = x - metrics.stringWidth(text) / 2;
-        y = y - (metrics.getHeight() / 2) + metrics.getAscent();
-        g2.drawString(text, x, y);
     }
 
     public void update() {

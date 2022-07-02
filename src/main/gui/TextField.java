@@ -2,6 +2,7 @@ package main.gui;
 
 import main.Game;
 import main.math.MathUtils;
+import main.scenes.Scene;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -32,6 +33,16 @@ public class TextField extends Widget {
     }
 
     @Override
+    public void onMouseDown() {
+
+    }
+
+    @Override
+    public void onMouseUp() {
+
+    }
+
+    @Override
     public void onKeyPressed(KeyEvent event) {
         if (this.active) {
             if (Character.isLetterOrDigit(event.getKeyChar()) || event.getKeyChar() == '.') this.content += event.getKeyChar();
@@ -52,6 +63,6 @@ public class TextField extends Widget {
 
         g2.setColor(Color.WHITE);
         g2.setFont(new Font("Helvetia", Font.PLAIN, 20));
-        Game.drawCenteredString(g2, this.content, this.x, this.y);
+        Scene.drawCenteredString(g2, this.content, this.x, this.y);
     }
 }
