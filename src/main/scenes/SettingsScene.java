@@ -21,7 +21,8 @@ public class SettingsScene extends Scene {
 
     @Override
     public void draw(Graphics2D g2) {
-        this.drawBackground(g2);
+        g2.setColor(new Color(0xD5313131, true));
+        g2.fillRect(this.getWidth() / 2 - 200, 0, 400, this.getHeight());
         super.draw(g2);
 
         g2.setColor(Color.WHITE);

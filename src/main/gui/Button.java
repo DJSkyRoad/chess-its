@@ -17,9 +17,12 @@ public class Button extends Widget {
     protected boolean hovering;
     protected boolean active;
     protected ClickEvent clickEvent;
-    private BufferedImage image;
-    private BufferedImage pressedImage;
     protected boolean pressed;
+
+    private BufferedImage image;
+    private BufferedImage hoveredImage;
+    private BufferedImage pressedImage;
+    private BufferedImage inactiveImage;
 
     public Button(String title, int x, int y, int width, int height, ClickEvent clickEvent) {
         super(x, y, width, height);
@@ -28,9 +31,13 @@ public class Button extends Widget {
         this.active = true;
         try {
             InputStream inputStream = Objects.requireNonNull(getClass().getResourceAsStream("/resources/button.png"));
-            this.image = ImageIO.read(inputStream);
+            this.image = this.tintImage(ImageIO.read(inputStream), new Color(218, 90, 0));
+            inputStream = Objects.requireNonNull(getClass().getResourceAsStream("/resources/button.png"));
+            this.hoveredImage = this.tintImage(ImageIO.read(inputStream), new Color(255, 90, 0));
+            inputStream = Objects.requireNonNull(getClass().getResourceAsStream("/resources/button.png"));
+            this.inactiveImage = this.tintImage(ImageIO.read(inputStream), new Color(84, 84, 84));
             inputStream = Objects.requireNonNull(getClass().getResourceAsStream("/resources/button_pressed.png"));
-            this.pressedImage = ImageIO.read(inputStream);
+            this.pressedImage = this.tintImage(ImageIO.read(inputStream), new Color(217, 90, 1));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -57,10 +64,9 @@ public class Button extends Widget {
 
     @Override
     public void draw(Graphics2D g2) {
-        g2.setXORMode(!this.active ? new Color(129, 129, 129) : this.hovering ? new Color(133, 78, 8) : new Color(143, 88, 0));
-        Widget.drawCenteredImage(g2, this.pressed ? this.pressedImage : this.image, this.x, this.y, this.width, this.height);
-        g2.setPaintMode();
-
+        BufferedImage img = !this.active ? this.inactiveImage : this.pressed ? this.pressedImage
+                : this.hovering ? this.hoveredImage : this.image;
+        Widget.drawCenteredImage(g2, img, this.x, this.y, this.width, this.height);
         g2.setColor(this.active ? Color.WHITE : Color.GRAY);
         g2.setFont(Game.INSTANCE.font.deriveFont(Font.PLAIN, 20));
         Scene.drawCenteredString(g2, this.title, this.x, this.y);

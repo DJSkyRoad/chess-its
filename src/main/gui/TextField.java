@@ -15,9 +15,11 @@ public class TextField extends Widget {
     protected String content;
     private boolean hovering;
     protected boolean active;
-    private BufferedImage image;
     private int cursorPos;
     protected int maxLength;
+
+    private BufferedImage image;
+    private BufferedImage selectedImage;
 
     public TextField(String content, int x, int y, int width, int height) {
         super(x, y, width, height);
@@ -27,7 +29,9 @@ public class TextField extends Widget {
 
         try {
             InputStream inputStream = Objects.requireNonNull(getClass().getResourceAsStream("/resources/text_field.png"));
-            this.image = ImageIO.read(inputStream);
+            this.image = this.tintImage(ImageIO.read(inputStream), new Color(218, 90, 0));
+            inputStream = Objects.requireNonNull(getClass().getResourceAsStream("/resources/text_field.png"));
+            this.selectedImage = this.tintImage(ImageIO.read(inputStream), new Color(255, 136, 0));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -88,10 +92,7 @@ public class TextField extends Widget {
 
     @Override
     public void draw(Graphics2D g2) {
-        g2.setXORMode(this.hovering || this.active ? new Color(204, 114, 0) : new Color(154, 86, 0));
-        Widget.drawCenteredImage(g2, this.image, this.x, this.y, this.width, this.height);
-        g2.setPaintMode();
-
+        Widget.drawCenteredImage(g2, this.hovering || this.active ? this.selectedImage : this.image, this.x, this.y, this.width, this.height);
         g2.setColor(Color.WHITE);
         g2.setFont(new Font("Helvetia", Font.PLAIN, 20));
         String message = this.active ? this.content.substring(0, this.cursorPos) + "|" + this.content.substring(this.cursorPos) : this.content;
