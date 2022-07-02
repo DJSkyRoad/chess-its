@@ -53,7 +53,7 @@ public abstract class Scene {
 
     public void onMouseClick(int x, int y) {
         for (Widget widget : this.getWidgets()) {
-            if (widget.isColliding(x, y)) widget.onClick();
+            widget.onClick();
         }
     }
 

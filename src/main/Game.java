@@ -1,7 +1,6 @@
 package main;
 
-import main.input.KeyInput;
-import main.input.MouseInput;
+import main.input.InputManager;
 import main.networking.connection.Client;
 import main.networking.connection.Connection;
 import main.networking.connection.Server;
@@ -20,9 +19,7 @@ public class Game extends JPanel implements Runnable {
     public static final int tileSize = 20 * 3;
     public static final int borderSize = 10;
     public static final int panelSize = tileSize * borderSize;
-    private final int fps = 60;
-    private final MouseInput mouseInput = new MouseInput();
-    public final KeyInput keyInput = new KeyInput();
+    public final InputManager input = new InputManager();
     private final AudioPlayer audioPlayer = new AudioPlayer();
     public static double deltaTime;
     private double intervalTime;
@@ -41,14 +38,12 @@ public class Game extends JPanel implements Runnable {
         this.setPreferredSize(new Dimension(panelSize, panelSize));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
-        this.addMouseListener(this.mouseInput);
+        this.addMouseListener(this.input);
 
         InputStream inputStream = getClass().getResourceAsStream("/resources/font/TitanOne-Regular.ttf");
         try {
             this.font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
-        } catch (FontFormatException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (FontFormatException | IOException e) {
             e.printStackTrace();
         }
 
@@ -89,7 +84,8 @@ public class Game extends JPanel implements Runnable {
 
     public void setOverlayScene(Scene scene) {
         this.overlayScene = scene;
-        this.getOverlayScene().ifPresent((s) -> s.resize(this.getWidth(), this.getHeight()));
+        if (scene == null) this.input.resetInput();
+        else scene.resize(this.getWidth(), this.getHeight());
     }
 
     public Optional<Scene> getOverlayScene() {
@@ -119,36 +115,37 @@ public class Game extends JPanel implements Runnable {
             int y = pos.y;
             currentScene.onMouseHover(x, y);
 
-            if (this.mouseInput.mouseClicked) {
-                this.mouseInput.mouseClicked = false;
+            if (this.input.mouseClicked) {
+                this.input.mouseClicked = false;
                 currentScene.onMouseClick(x, y);
             }
-            else if (this.mouseInput.mousePressed) {
-                this.mouseInput.mousePressed = false;
+            else if (this.input.mousePressed) {
+                this.input.mousePressed = false;
                 currentScene.onMousePress(x, y);
             }
-            else if (this.mouseInput.mouseReleased) {
-                this.mouseInput.mouseReleased = false;
+            else if (this.input.mouseReleased) {
+                this.input.mouseReleased = false;
                 currentScene.onMouseRelease(x, y);
             }
         }
-        if (this.keyInput.keyPressed != null) {
-            currentScene.onKeyPressed(this.keyInput.keyPressed);
-            this.keyInput.keyPressed = null;
+        if (this.input.keyPressed != null) {
+            currentScene.onKeyPressed(this.input.keyPressed);
+            this.input.keyPressed = null;
         }
         this.repaint();
     }
 
     @Override
     public void run() {
-        double updateInterval = 1000000000/this.fps;
+        int fps = 60;
+        double updateInterval = 1000000000/ fps;
         long lastTime = System.nanoTime();
         long currentTime;
 
         while (this.gameThread != null) {
             currentTime = System.nanoTime();
             this.intervalTime += (currentTime - lastTime) / updateInterval;
-            this.deltaTime += (currentTime - lastTime) * 0.000000001D;
+            deltaTime += (currentTime - lastTime) * 0.000000001D;
             lastTime = currentTime;
 
             if (intervalTime >= 1) {

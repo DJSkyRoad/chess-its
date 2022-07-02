@@ -68,7 +68,7 @@ public class Button extends Widget {
 
     @Override
     public void onClick() {
-        if (this.active) {
+        if (this.active && this.hovering) {
             Game.INSTANCE.playSound(AudioPlayer.BUTTON_CLICK);
             this.clickEvent.onClick(this);
         }

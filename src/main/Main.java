@@ -23,7 +23,7 @@ public class Main {
 		}
 
     	Game panel = new Game();
-		window.addKeyListener(panel.keyInput);
+		window.addKeyListener(panel.input);
 		window.add(panel);
 		window.pack();
 

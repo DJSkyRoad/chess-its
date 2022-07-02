@@ -2,14 +2,11 @@ package main.gui;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
 public class ImageButton extends Button {
-    private BufferedImage image;
-
     public ImageButton(String imagePath, int x, int y, int width, int height, ClickEvent clickEvent) {
         super(imagePath, x, y, width, height, clickEvent);
         try {
