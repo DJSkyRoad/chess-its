@@ -1,6 +1,6 @@
 package main.scenes;
 
-import main.AudioPlayer;
+import main.sound.AudioPlayer;
 import main.Game;
 import main.gui.Board;
 import main.gui.ImageButton;
@@ -243,7 +243,7 @@ public class GameScene extends Scene {
         this.board.pos[move.pos.y][move.pos.x] = null;
         this.board.pos[move.dest.y][move.dest.x] = piece;
         this.lastMove = move;
-        Game.INSTANCE.playSound(AudioPlayer.PLACE_PIECE);
+        Game.INSTANCE.audioPlayer.playSound(AudioPlayer.PLACE_PIECE);
         piece.onMovedPost(this, move);
     }
 

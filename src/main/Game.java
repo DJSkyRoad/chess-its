@@ -6,12 +6,12 @@ import main.networking.connection.Connection;
 import main.networking.connection.Server;
 import main.scenes.Scene;
 import main.scenes.TitleScene;
+import main.sound.AudioPlayer;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Optional;
 
 public class Game extends JPanel implements Runnable {
@@ -20,7 +20,7 @@ public class Game extends JPanel implements Runnable {
     public static final int borderSize = 10;
     public static final int panelSize = tileSize * borderSize;
     public final InputManager input = new InputManager();
-    private final AudioPlayer audioPlayer = new AudioPlayer();
+    public final AudioPlayer audioPlayer = new AudioPlayer();
     public static double deltaTime;
     private double intervalTime;
 
@@ -48,6 +48,8 @@ public class Game extends JPanel implements Runnable {
         }
 
         this.setScene(new TitleScene());
+        this.audioPlayer.playMusic(AudioPlayer.BGM);
+        this.audioPlayer.setMusicVolume(0.5F);
     }
 
     public void startServer(int port) {
@@ -66,11 +68,6 @@ public class Game extends JPanel implements Runnable {
     public void closeConnection() {
         this.connection.close();
         this.connection = null;
-    }
-
-    public void playSound(URL url) {
-        this.audioPlayer.open(url);
-        this.audioPlayer.start();
     }
 
     public void setScene(Scene scene) {

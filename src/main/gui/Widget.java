@@ -1,6 +1,8 @@
 package main.gui;
 
 
+import main.math.MathUtils;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -20,11 +22,15 @@ public abstract class Widget {
 
     public abstract void draw(Graphics2D g2);
     public abstract void update(int x, int y);
-    public abstract boolean isColliding(int x, int y);
     public abstract void onClick();
     public abstract void onMouseDown();
     public abstract void onMouseUp();
     public void onKeyPressed(KeyEvent event) {}
+
+    public boolean isColliding(int x, int y) {
+        return MathUtils.inRange(x, this.x - (this.width / 2), this.x + (this.width / 2))
+                && MathUtils.inRange(y, this.y - (this.height / 2), this.y + (this.height / 2));
+    }
 
     public void resize(int x, int y, int width, int height) {
         this.x = x;

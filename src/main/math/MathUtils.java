@@ -9,11 +9,11 @@ public class MathUtils {
         return value >= min && value <= max;
     }
 
-    public static boolean inRangeEx(float value, float min, float max) {
-        return value > min && value < max;
+    public static float clamp(float value, float min, float max) {
+        return value < min ? min : value > max ? max : value;
     }
 
-    public static float clamp(float value, float min, float max) {
+    public static int clamp(int value, int min, int max) {
         return value < min ? min : value > max ? max : value;
     }
 }

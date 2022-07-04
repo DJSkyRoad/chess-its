@@ -1,6 +1,6 @@
 package main.gui;
 
-import main.AudioPlayer;
+import main.sound.AudioPlayer;
 import main.Game;
 import main.math.MathUtils;
 import main.scenes.Scene;
@@ -52,12 +52,6 @@ public class Button extends Widget {
     }
 
     @Override
-    public boolean isColliding(int x, int y) {
-        return MathUtils.inRange(x, this.x - (this.width / 2), this.x + (this.width / 2))
-                && MathUtils.inRange(y, this.y - (this.height / 2), this.y + (this.height / 2));
-    }
-
-    @Override
     public void update(int mouseX, int mouseY) {
         this.hovering = this.isColliding(mouseX, mouseY);
     }
@@ -75,7 +69,7 @@ public class Button extends Widget {
     @Override
     public void onClick() {
         if (this.active && this.hovering) {
-            Game.INSTANCE.playSound(AudioPlayer.BUTTON_CLICK);
+            Game.INSTANCE.audioPlayer.playSound(AudioPlayer.BUTTON_CLICK);
             this.clickEvent.onClick(this);
             this.pressed = false;
         }
