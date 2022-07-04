@@ -38,7 +38,7 @@ public class GameScene extends Scene {
         else this.board.resize(this.getWidth() / 2, this.getHeight() / 2);
 
         this.addWidget(new ImageButton("/resources/options.png", this.getWidth() - 50, 50, 50, 50, (button) -> {
-            Game.INSTANCE.setOverlayScene(new SettingsScene());
+            Game.INSTANCE.setOverlayScene(new SettingsOverlayScene());
         }));
 
         this.generateMoves(this.currentTurn);

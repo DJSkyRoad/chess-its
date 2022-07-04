@@ -2,12 +2,16 @@ package main.scenes;
 
 import main.Game;
 import main.gui.Button;
+import main.gui.ImageButton;
 
 import java.awt.*;
 
 public class TitleScene extends Scene {
     @Override
     public void init() {
+        this.addWidget(new ImageButton("/resources/options.png", this.getWidth() - 50, 50, 50, 50, (button) -> {
+            Game.INSTANCE.setScene(new SettingsScene());
+        }));
         this.addWidget(new Button("Host Game", this.getWidth() / 2, this.getHeight() / 2, 200, 50, (button) -> {
             Game.INSTANCE.setScene(new HostMenuScene());
         }));

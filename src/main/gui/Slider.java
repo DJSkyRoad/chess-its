@@ -37,7 +37,7 @@ public class Slider extends Widget {
     @Override
     public void draw(Graphics2D g2) {
         Widget.drawCenteredImage(g2, this.bg, this.x, this.y, this.width, this.height / 2);
-        Widget.drawCenteredImage(g2, this.fg, this.fgX, this.y, this.height, this.height);
+        Widget.drawCenteredImage(g2, this.fg, this.fgX, this.y, this.height / 2, this.height / 2);
     }
 
     @Override

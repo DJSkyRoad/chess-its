@@ -17,9 +17,6 @@ public class SettingsScene extends Scene {
         this.addWidget(new Slider(Game.INSTANCE.audioPlayer.getSoundVolume(), this.getWidth() / 2, this.getHeight() / 2 + 40, 200, 50, (slider) -> {
             Game.INSTANCE.audioPlayer.setSoundVolume(slider.getValue());
         }));
-        this.addWidget(new Button("Back", this.getWidth() / 2, this.getHeight() / 2 + 100, 200, 50, (button) -> {
-            Game.INSTANCE.setOverlayScene(null);
-        }));
         this.addWidget(new Button("Quit to Title", this.getWidth() / 2, this.getHeight() / 2 + 160, 200, 50, (button) -> {
             Game.INSTANCE.setScene(new TitleScene());
             Game.INSTANCE.setOverlayScene(null);
@@ -28,8 +25,7 @@ public class SettingsScene extends Scene {
 
     @Override
     public void draw(Graphics2D g2) {
-        g2.setColor(new Color(0xD5313131, true));
-        g2.fillRect(this.getWidth() / 2 - 200, 0, 400, this.getHeight());
+        this.drawBackground(g2);
         super.draw(g2);
 
         g2.setColor(Color.WHITE);
